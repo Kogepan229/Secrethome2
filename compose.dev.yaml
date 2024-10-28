@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:17
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: secrethome
+      POSTGRES_PASSWORD: secrethome
+      POSTGRES_DB: secrethome
+      TZ: Asia/Tokyo
+
+  dev:
+    tty: true
+    volumes:
+      - .:/secrethome
+      - /secrethome/node_modules
+      - /secrethome/main/node_modules
+    ports:
+      - '60231:3000'
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/dev/Dockerfile
+    working_dir: /secrethome
+    environment:
+      TZ: Asia/Tokyo
+    depends_on:
+      - postgres

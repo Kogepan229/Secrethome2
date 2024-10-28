@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:17
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: secrethome
+      POSTGRES_PASSWORD: secrethome
+      POSTGRES_DB: secrethome
+      TZ: Asia/Tokyo
