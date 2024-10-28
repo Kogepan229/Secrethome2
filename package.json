@@ -1,0 +1,19 @@
+{
+  "name": "secrethome",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "npm": "please use pnpm instead",
+    "pnpm": "9.12.3"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "scripts": {
+    "dev": "pnpm -F main run dev",
+    "build": "pnpm -F main next build",
+    "start": "-pnpm -F main next start",
+    "lint": "pnpm -F main next lint"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  }
+}
