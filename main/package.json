@@ -13,10 +13,10 @@
     "@vanilla-extract/css": "^1.16.0",
     "drizzle-orm": "^0.35.3",
     "drizzle-zod": "^0.5.1",
-    "next": "15.0.1",
+    "next": "15.0.2",
     "postgres": "^3.4.5",
-    "react": "19.0.0-rc-69d4b800-20241021",
-    "react-dom": "19.0.0-rc-69d4b800-20241021"
+    "react": "19.0.0-rc-02c0e824-20241028",
+    "react-dom": "19.0.0-rc-02c0e824-20241028"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.1",
