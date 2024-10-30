@@ -9,17 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
     "@vanilla-extract/css": "^1.16.0",
+    "drizzle-orm": "^0.35.3",
+    "drizzle-zod": "^0.5.1",
     "next": "15.0.1",
+    "postgres": "^3.4.5",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-dom": "19.0.0-rc-69d4b800-20241021"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.1",
+    "@next/env": "^15.0.2",
     "@types/node": "^22",
+    "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vanilla-extract/next-plugin": "^2.4.6",
+    "drizzle-kit": "^0.26.2",
     "eslint": "^9",
     "eslint-config-next": "15.0.1",
     "typescript": "^5"
