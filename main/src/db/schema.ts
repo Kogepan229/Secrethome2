@@ -1,6 +1,10 @@
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { pgTable, text, timestamp, pgEnum, jsonb, smallint, unique, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, pgEnum, smallint, unique, primaryKey } from "drizzle-orm/pg-core";
+
+export const adminTable = pgTable("admin", {
+  password: text("").notNull(),
+});
 
 export const roomTypeEnum = pgEnum("room_type", ["video", "image"]);
 export const roomsTable = pgTable("rooms", {
