@@ -8,11 +8,11 @@ export const vars = createGlobalTheme(":root", {
     textWhite: "#f0f0f0",
     textMutedGray: "#656d76",
     borderGray: "#e3e3e3",
-    borderDarkGray: "#d0d0d0",
-    hoverGray: "ebebeb",
+    borderDarkGray: "#9e9e9e",
+    hoverGray: "#ebebeb",
   },
   size: {
-    headerHeight: "40px",
+    headerHeight: "48px",
   },
 });
 
@@ -24,4 +24,27 @@ export const materials = {
       fontStyle: "normal",
     }),
   },
+  button: {
+    simpleWhite: style({
+      padding: "6px",
+      backgroundColor: "white",
+      border: "1px solid",
+      borderColor: vars.color.borderGray,
+      borderRadius: "8px",
+      color: "black",
+      boxShadow: "rgba(213, 217, 217, 0.5) 0 2px 5px 0",
+      cursor: "pointer",
+      fontSize: "16px",
+
+      ":hover": {
+        backgroundColor: vars.color.hoverGray,
+      },
+    }),
+  },
+  form: style({
+    maxWidth: "500px",
+    margin: "auto",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+  }),
 };
