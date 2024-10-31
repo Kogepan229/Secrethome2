@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import { Oswald } from "next/font/google";
+import { Noto_Sans_JP, Oswald } from "next/font/google";
 import "@/global.css";
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const _oswaldFont = Oswald({
   weight: "700", // bold
@@ -20,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body className={notoSansJP.className}>{children}</body>
     </html>
   );
 }
