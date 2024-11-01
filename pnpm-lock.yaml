@@ -14,6 +14,12 @@ importers:
 
   main:
     dependencies:
+      '@conform-to/react':
+        specifier: ^1.2.2
+        version: 1.2.2(react@19.0.0-rc-02c0e824-20241028)
+      '@conform-to/zod':
+        specifier: ^1.2.2
+        version: 1.2.2(zod@3.23.8)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -41,6 +47,9 @@ importers:
       react-dom:
         specifier: 19.0.0-rc-02c0e824-20241028
         version: 19.0.0-rc-02c0e824-20241028(react@19.0.0-rc-02c0e824-20241028)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.1
@@ -214,6 +223,19 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@conform-to/dom@1.2.2':
+    resolution: {integrity: sha512-f05EClpNP31o6lX4LYmmLqgsiTOHdGfY7z2XXK6U6rRp+EtxrkUBdrFlIGsfkf7e9AFO19h3/Cb/cXHVd1k1FA==}
+
+  '@conform-to/react@1.2.2':
+    resolution: {integrity: sha512-1JBECb3NKi5/IlexaYLgnAxGJ55MRuO2sEQ10cJfUK2bfltNbTIQnYUDG6pU886A4lda/q6UH/adPsjiB/4Gkg==}
+    peerDependencies:
+      react: '>=18'
+
+  '@conform-to/zod@1.2.2':
+    resolution: {integrity: sha512-mNCzh0XsF2vhCtD8bfHYMYayEJ9dP6/KsGjmq8DFcO1ykDTNQZwfi1MIm4evGYVempSS3poYr4xZjd7cXEbtaw==}
+    peerDependencies:
+      zod: ^3.21.0
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -2990,6 +3012,18 @@ snapshots:
 
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
+
+  '@conform-to/dom@1.2.2': {}
+
+  '@conform-to/react@1.2.2(react@19.0.0-rc-02c0e824-20241028)':
+    dependencies:
+      '@conform-to/dom': 1.2.2
+      react: 19.0.0-rc-02c0e824-20241028
+
+  '@conform-to/zod@1.2.2(zod@3.23.8)':
+    dependencies:
+      '@conform-to/dom': 1.2.2
+      zod: 3.23.8
 
   '@drizzle-team/brocli@0.10.2': {}
 
