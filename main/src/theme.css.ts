@@ -42,10 +42,4 @@ export const materials = {
       },
     }),
   },
-  form: style({
-    maxWidth: "500px",
-    margin: "auto",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-  }),
 };

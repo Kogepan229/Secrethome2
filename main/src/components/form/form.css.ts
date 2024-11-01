@@ -1,6 +1,13 @@
 import { vars } from "@/theme.css";
 import { style } from "@vanilla-extract/css";
 
+export const form = style({
+  maxWidth: "500px",
+  margin: "auto",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+});
+
 export const wrapper = style({
   marginTop: "16px",
 });

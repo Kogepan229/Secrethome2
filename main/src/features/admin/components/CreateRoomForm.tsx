@@ -3,11 +3,11 @@ import { createRoomAction } from "../actions";
 import { getFormProps, getInputProps, getSelectProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { createRoomSchema } from "../schema";
-import { materials } from "@/theme.css";
 import { useActionState } from "react";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
+import { Form } from "@/components/form/Form";
 
 export function CreateRoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
@@ -21,7 +21,7 @@ export function CreateRoomForm() {
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className={materials.form}>
+    <Form {...getFormProps(form)} action={action}>
       <FormInputText label="名前" {...getInputProps(fields.name, { type: "text" })} error={fields.name.errors} />
       <FormInputTextArea label="概要" {...getInputProps(fields.description, { type: "text" })} error={fields.description.errors} />
       <FormSelect
@@ -34,6 +34,6 @@ export function CreateRoomForm() {
         error={fields.roomType.errors}
       />
       <FormInputText label="Access Key" {...getInputProps(fields.accessKey, { type: "text" })} error={fields.accessKey.errors} />
-    </form>
+    </Form>
   );
 }
