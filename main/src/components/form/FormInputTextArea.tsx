@@ -6,6 +6,7 @@ import { ErrorMessage } from "./FormErrorMessage";
 type Props = {
   label: string;
   error?: string | string[];
+  key: string;
 } & DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
 
 export function FormInputTextArea(props: Props) {

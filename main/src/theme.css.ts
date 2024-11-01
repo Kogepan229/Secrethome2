@@ -26,13 +26,33 @@ export const materials = {
     }),
   },
   button: {
-    simpleWhite: style({
+    WhitePrimary: style({
       padding: "6px",
       backgroundColor: "white",
       border: "1px solid",
-      borderColor: vars.color.borderGray,
+      borderColor: vars.color.primary3,
       borderRadius: "8px",
       color: "black",
+      boxShadow: "rgba(213, 217, 217, 0.5) 0 2px 5px 0",
+      cursor: "pointer",
+      fontSize: "16px",
+
+      ":hover": {
+        backgroundColor: vars.color.hoverGray,
+      },
+
+      ":disabled": {
+        borderColor: vars.color.borderDarkGray,
+        backgroundColor: vars.color.hoverGray,
+      },
+    }),
+    WhiteRed: style({
+      padding: "6px",
+      backgroundColor: "white",
+      border: "1px solid",
+      borderColor: vars.color.error,
+      borderRadius: "8px",
+      color: vars.color.error,
       boxShadow: "rgba(213, 217, 217, 0.5) 0 2px 5px 0",
       cursor: "pointer",
       fontSize: "16px",

@@ -7,11 +7,11 @@ type Props = {
   label: string;
   error?: string | string[];
   options: { text: string; value: string }[];
+  key: string;
 } & DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
 
 export function FormSelect(props: Props) {
   const options = props.options.map((value) => {
-    console.log(value.text);
     return (
       <option key={value.value} value={value.value}>
         {value.text}

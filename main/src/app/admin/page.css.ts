@@ -7,7 +7,7 @@ export const main = style({
 });
 
 export const create_button = style([
-  materials.button.simpleWhite,
+  materials.button.WhitePrimary,
   {
     width: "fit-content",
   },

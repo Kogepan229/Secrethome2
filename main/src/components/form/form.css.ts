@@ -1,4 +1,4 @@
-import { vars } from "@/theme.css";
+import { materials, vars } from "@/theme.css";
 import { style } from "@vanilla-extract/css";
 
 export const form = style({
@@ -81,3 +81,14 @@ export const error_message = style({
   fontWeight: "500",
   fontSize: "14px",
 });
+
+export const action_container = style({
+  display: "flex",
+  width: "100%",
+  marginTop: "32px",
+  justifyContent: "space-between",
+});
+
+export const cancel_button = style([materials.button.WhiteRed, { width: "60px" }]);
+
+export const submit_button = style([materials.button.WhitePrimary, { width: "60px" }]);
