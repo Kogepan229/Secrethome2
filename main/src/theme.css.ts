@@ -10,6 +10,7 @@ export const vars = createGlobalTheme(":root", {
     borderGray: "#e3e3e3",
     borderDarkGray: "#9e9e9e",
     hoverGray: "#ebebeb",
+    error: "#f54c36",
   },
   size: {
     headerHeight: "48px",

@@ -16,14 +16,14 @@ export function CreateRoomForm() {
       return parseWithZod(formData, { schema: createRoomSchema });
     },
     shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
   });
 
   return (
     <form {...getFormProps(form)} action={action} className={materials.form}>
-      <FormInputText label="名前" {...getInputProps(fields.name, { type: "text" })} />
-      {fields.name.errors}
+      <FormInputText label="名前" {...getInputProps(fields.name, { type: "text" })} error={fields.name.errors} />
       <FormInputTextArea label="概要" {...getInputProps(fields.description, { type: "text" })} />
-      <FormInputText label="Access Key" {...getInputProps(fields.accessKey, { type: "text" })} />
+      <FormInputText label="Access Key" {...getInputProps(fields.accessKey, { type: "text" })} error={fields.accessKey.errors} />
     </form>
   );
 }
