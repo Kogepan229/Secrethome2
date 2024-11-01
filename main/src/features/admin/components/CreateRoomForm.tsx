@@ -1,12 +1,13 @@
 "use client";
 import { createRoomAction } from "../actions";
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { getFormProps, getInputProps, getSelectProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { createRoomSchema } from "../schema";
 import { materials } from "@/theme.css";
 import { useActionState } from "react";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
+import { FormSelect } from "@/components/form/FormSelect";
 
 export function CreateRoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
@@ -22,7 +23,16 @@ export function CreateRoomForm() {
   return (
     <form {...getFormProps(form)} action={action} className={materials.form}>
       <FormInputText label="名前" {...getInputProps(fields.name, { type: "text" })} error={fields.name.errors} />
-      <FormInputTextArea label="概要" {...getInputProps(fields.description, { type: "text" })} />
+      <FormInputTextArea label="概要" {...getInputProps(fields.description, { type: "text" })} error={fields.description.errors} />
+      <FormSelect
+        label="ルームタイプ"
+        {...getSelectProps(fields.roomType)}
+        options={[
+          { text: "動画", value: "video" },
+          { text: "画像", value: "image" },
+        ]}
+        error={fields.roomType.errors}
+      />
       <FormInputText label="Access Key" {...getInputProps(fields.accessKey, { type: "text" })} error={fields.accessKey.errors} />
     </form>
   );
