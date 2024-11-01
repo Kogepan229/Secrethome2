@@ -18,6 +18,7 @@ export const input_text = style({
   padding: "4px",
   border: "1px solid",
   borderColor: vars.color.borderDarkGray,
+  borderRadius: "4px",
   fontSize: "16px",
 
   ":focus": {
@@ -35,6 +36,7 @@ export const input_textarea = style({
   padding: "4px",
   border: "1px solid",
   borderColor: vars.color.borderDarkGray,
+  borderRadius: "4px",
   resize: "vertical",
   fontSize: "16px",
 
