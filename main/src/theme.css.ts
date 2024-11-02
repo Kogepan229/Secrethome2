@@ -6,7 +6,8 @@ export const vars = createGlobalTheme(":root", {
     primary2: "#4dbdce",
     primary3: "#1ca1b6",
     textWhite: "#f0f0f0",
-    textMutedGray: "#656d76",
+    textMutedGray: "#555055",
+    textBlack: "#404040",
     borderGray: "#e3e3e3",
     borderDarkGray: "#9e9e9e",
     hoverGray: "#ebebeb",
@@ -42,6 +43,7 @@ export const materials = {
       },
 
       ":disabled": {
+        color: vars.color.textMutedGray,
         borderColor: vars.color.borderDarkGray,
         backgroundColor: vars.color.hoverGray,
       },
@@ -52,7 +54,7 @@ export const materials = {
       border: "1px solid",
       borderColor: vars.color.error,
       borderRadius: "8px",
-      color: vars.color.error,
+      color: "black",
       boxShadow: "rgba(213, 217, 217, 0.5) 0 2px 5px 0",
       cursor: "pointer",
       fontSize: "16px",
