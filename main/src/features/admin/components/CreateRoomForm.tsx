@@ -10,6 +10,7 @@ import { FormSelect } from "@/components/form/FormSelect";
 import { Form } from "@/components/form/Form";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
+import { MessageModal } from "@/components/MessageModal";
 
 export function CreateRoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
@@ -22,26 +23,30 @@ export function CreateRoomForm() {
     shouldRevalidate: "onInput",
   });
   usePreventResetForm(form);
+
   return (
-    <Form {...getFormProps(form)} action={action}>
-      <FormInputText label="名前" field={fields.name} />
-      <FormInputTextArea label="概要" field={fields.description} />
-      <FormSelect
-        label="ルームタイプ"
-        field={fields.roomType}
-        options={[
-          { text: "動画", value: "video" },
-          { text: "画像", value: "image" },
-        ]}
-      />
-      <FormInputText label="Access Key" field={fields.accessKey} />
-      <FormSubmitCalcel
-        cancelText="戻る"
-        hrefCancel="/admin"
-        submitText="作成"
-        dirty={form.dirty}
-        disabled={!createRoomSchema.safeParse(form.value).success}
-      />
-    </Form>
+    <>
+      <Form {...getFormProps(form)} action={action}>
+        <FormInputText label="名前" field={fields.name} />
+        <FormInputTextArea label="概要" field={fields.description} />
+        <FormSelect
+          label="ルームタイプ"
+          field={fields.roomType}
+          options={[
+            { text: "動画", value: "video" },
+            { text: "画像", value: "image" },
+          ]}
+        />
+        <FormInputText label="Access Key" field={fields.accessKey} />
+        <FormSubmitCalcel
+          cancelText="戻る"
+          hrefCancel="/admin"
+          submitText="作成"
+          dirty={form.dirty}
+          disabled={!createRoomSchema.safeParse(form.value).success}
+        />
+      </Form>
+      <MessageModal open={form.status === "success"} message="作成しました" closeText="戻る" onClose="/admin" />
+    </>
   );
 }
