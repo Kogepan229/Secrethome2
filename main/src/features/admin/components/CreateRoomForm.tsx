@@ -9,6 +9,7 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
 import { Form } from "@/components/form/Form";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
+import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 
 export function CreateRoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
@@ -20,6 +21,7 @@ export function CreateRoomForm() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+  usePreventResetForm(form);
 
   return (
     <Form {...getFormProps(form)} action={action}>
