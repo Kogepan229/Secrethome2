@@ -1,14 +1,13 @@
 "use client";
-import type { DetailedHTMLProps, SelectHTMLAttributes } from "react";
 import * as css from "./form.css";
 import { ErrorMessage } from "./FormErrorMessage";
+import { getSelectProps, type FieldMetadata } from "@conform-to/react";
 
 type Props = {
   label: string;
-  error?: string | string[];
+  field: FieldMetadata;
   options: { text: string; value: string }[];
-  key: string;
-} & DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
+};
 
 export function FormSelect(props: Props) {
   const options = props.options.map((value) => {
@@ -23,11 +22,11 @@ export function FormSelect(props: Props) {
     <div className={css.wrapper}>
       <label className={css.label}>
         {props.label}
-        <select {...props} className={css.select}>
+        <select {...getSelectProps(props.field)} className={css.select}>
           {options}
         </select>
       </label>
-      <ErrorMessage message={props.error} />
+      <ErrorMessage message={props.field.errors} />
     </div>
   );
 }

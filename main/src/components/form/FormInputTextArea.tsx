@@ -1,22 +1,21 @@
 "use client";
-import type { DetailedHTMLProps, TextareaHTMLAttributes } from "react";
 import * as css from "./form.css";
 import { ErrorMessage } from "./FormErrorMessage";
+import { getInputProps, type FieldMetadata } from "@conform-to/react";
 
 type Props = {
   label: string;
-  error?: string | string[];
-  key: string;
-} & DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
+  field: FieldMetadata;
+};
 
 export function FormInputTextArea(props: Props) {
   return (
     <div className={css.wrapper}>
       <label className={css.label}>
         {props.label}
-        <textarea {...props} spellCheck="false" autoComplete="off" className={css.input_textarea} />
+        <textarea {...getInputProps(props.field, { type: "text" })} spellCheck="false" autoComplete="off" className={css.input_textarea} />
       </label>
-      <ErrorMessage message={props.error} />
+      <ErrorMessage message={props.field.errors} />
     </div>
   );
 }

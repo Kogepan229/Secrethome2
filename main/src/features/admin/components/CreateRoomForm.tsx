@@ -1,6 +1,6 @@
 "use client";
 import { createRoomAction } from "../actions";
-import { getFormProps, getInputProps, getSelectProps, useForm } from "@conform-to/react";
+import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { createRoomSchema } from "../schema";
 import { useActionState } from "react";
@@ -22,32 +22,19 @@ export function CreateRoomForm() {
     shouldRevalidate: "onInput",
   });
   usePreventResetForm(form);
-
   return (
     <Form {...getFormProps(form)} action={action}>
-      <FormInputText label="名前" {...getInputProps(fields.name, { type: "text" })} key="name" error={fields.name.errors} />
-      <FormInputTextArea
-        label="概要"
-        {...getInputProps(fields.description, { type: "text" })}
-        key="description"
-        error={fields.description.errors}
-      />
+      <FormInputText label="名前" field={fields.name} />
+      <FormInputTextArea label="概要" field={fields.description} />
       <FormSelect
         label="ルームタイプ"
-        {...getSelectProps(fields.roomType)}
+        field={fields.roomType}
         options={[
           { text: "動画", value: "video" },
           { text: "画像", value: "image" },
         ]}
-        key="roomType"
-        error={fields.roomType.errors}
       />
-      <FormInputText
-        label="Access Key"
-        {...getInputProps(fields.accessKey, { type: "text" })}
-        key="accessKey"
-        error={fields.accessKey.errors}
-      />
+      <FormInputText label="Access Key" field={fields.accessKey} />
       <FormSubmitCalcel
         cancelText="戻る"
         hrefCancel="/admin"
