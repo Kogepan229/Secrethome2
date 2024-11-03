@@ -11,6 +11,7 @@ import { Form } from "@/components/form/Form";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { MessageModal } from "@/components/MessageModal";
+import { FormCustomDescriptions } from "./FormCustomDescriptions";
 
 export function CreateRoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
@@ -23,6 +24,7 @@ export function CreateRoomForm() {
     shouldRevalidate: "onInput",
   });
   usePreventResetForm(form);
+  const g = fields.customDescriptionList;
 
   return (
     <>
@@ -37,6 +39,7 @@ export function CreateRoomForm() {
             { text: "画像", value: "image" },
           ]}
         />
+        <FormCustomDescriptions form={form} field={fields.customDescriptionList} />
         <FormInputText label="Access Key" field={fields.accessKey} />
         <FormSubmitCalcel
           cancelText="戻る"
@@ -50,3 +53,9 @@ export function CreateRoomForm() {
     </>
   );
 }
+
+/*
+'FieldMetadata<{ id: string; label: string; }[] | null | undefined, { name: string; roomType: "video" | "image"; accessKey: string; description?: string | null | undefined; customDescriptionList?: { ...; }[] | null | undefined; }, string[]>'
+'FieldMetadata<CustomDescriptionCategory[], { name: string; roomType: "video" | "image"; accessKey: string; description?: string | null | undefined; customDescriptionList?: { ...; }[] | ... 1 more ... | undefined; }, string[]>'
+
+*/

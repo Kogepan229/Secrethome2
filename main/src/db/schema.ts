@@ -1,6 +1,7 @@
+import type { CustomDescriptionCategory } from "@/features/admin/types";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { pgTable, text, timestamp, pgEnum, smallint, unique, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, pgEnum, smallint, unique, primaryKey, jsonb } from "drizzle-orm/pg-core";
 
 export const adminTable = pgTable("admin", {
   password: text("").notNull(),
@@ -14,10 +15,28 @@ export const roomsTable = pgTable("rooms", {
     .notNull(),
   name: text("name").notNull(),
   description: text("description"),
+  customDescriptionList: jsonb("custom_description_list").$type<CustomDescriptionCategory[]>().default([]),
   roomType: roomTypeEnum("room_type").notNull(),
   accessKey: text("access_key").unique().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 });
+
+export const customDescriptionsTable = pgTable(
+  "custom_descriptions",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId())
+      .notNull(),
+    contentId: text("content_id")
+      .references(() => contentsTable.id)
+      .notNull(),
+    description: text("description").notNull(),
+  },
+  (t) => ({
+    unique1: unique().on(t.id, t.contentId),
+  }),
+);
 
 export const tagGroupsTable = pgTable(
   "tag_groups",

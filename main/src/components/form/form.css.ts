@@ -4,6 +4,7 @@ import { style } from "@vanilla-extract/css";
 export const form = style({
   maxWidth: "500px",
   margin: "auto",
+  marginBottom: "40px",
   paddingLeft: "20px",
   paddingRight: "20px",
 });
