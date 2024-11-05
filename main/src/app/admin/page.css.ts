@@ -4,11 +4,13 @@ import { style } from "@vanilla-extract/css";
 export const main = style({
   width: "60%",
   margin: "auto",
+  marginTop: "48px",
 });
 
 export const create_button = style([
   materials.button.WhitePrimary,
   {
     width: "fit-content",
+    margin: "8px 0",
   },
 ]);
