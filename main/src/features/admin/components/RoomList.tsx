@@ -3,8 +3,10 @@ import { db } from "@/db/db";
 import { roomsTable } from "@/db/schema";
 import * as css from "./RoomList.css";
 import Link from "next/link";
+import { connection } from "next/server";
 
 export async function RoomList() {
+  await connection();
   const rooms = await db.select().from(roomsTable).orderBy(roomsTable.createdAt);
   const roomList = rooms.map((room) => {
     return (
