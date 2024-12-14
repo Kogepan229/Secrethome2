@@ -24,7 +24,6 @@ export function CreateRoomForm() {
     shouldRevalidate: "onInput",
   });
   usePreventResetForm(form);
-  const g = fields.customDescriptionList;
 
   return (
     <>
@@ -53,9 +52,3 @@ export function CreateRoomForm() {
     </>
   );
 }
-
-/*
-'FieldMetadata<{ id: string; label: string; }[] | null | undefined, { name: string; roomType: "video" | "image"; accessKey: string; description?: string | null | undefined; customDescriptionList?: { ...; }[] | null | undefined; }, string[]>'
-'FieldMetadata<CustomDescriptionCategory[], { name: string; roomType: "video" | "image"; accessKey: string; description?: string | null | undefined; customDescriptionList?: { ...; }[] | ... 1 more ... | undefined; }, string[]>'
-
-*/
