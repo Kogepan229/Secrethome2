@@ -3,8 +3,8 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const createRoomSchema = createInsertSchema(roomsTable, {
-  name: (schema) => schema.name.trim().min(1, "1文字以上必要です"),
-  description: (schema) => schema.description.trim().transform((s) => (s === "" ? null : s)),
+  name: (schema) => schema.trim().min(1, "1文字以上必要です"),
+  description: (schema) => schema.trim().transform((s) => (s === "" ? null : s)),
   customDescriptionList: z
     .array(
       z.object({
@@ -13,7 +13,7 @@ export const createRoomSchema = createInsertSchema(roomsTable, {
       }),
     )
     .nullish(),
-  accessKey: (schema) => schema.accessKey.trim().min(1, "1文字以上必要です"),
+  accessKey: (schema) => schema.trim().min(1, "1文字以上必要です"),
 }).pick({
   name: true,
   description: true,
