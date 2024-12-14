@@ -33,9 +33,7 @@ export const customDescriptionsTable = pgTable(
       .notNull(),
     description: text("description").notNull(),
   },
-  (t) => ({
-    unique1: unique().on(t.id, t.contentId),
-  }),
+  (t) => [unique().on(t.id, t.contentId)],
 );
 
 export const tagGroupsTable = pgTable(
@@ -53,10 +51,7 @@ export const tagGroupsTable = pgTable(
     order: smallint("order"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
   },
-  (t) => ({
-    unique1: unique().on(t.roomId, t.name),
-    unique2: unique().on(t.roomId, t.order),
-  }),
+  (t) => [unique().on(t.roomId, t.name), unique().on(t.roomId, t.order)],
 );
 
 export const tagsTable = pgTable(
@@ -72,9 +67,7 @@ export const tagsTable = pgTable(
     name: text("name").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
   },
-  (t) => ({
-    unique1: unique().on(t.groupId, t.name),
-  }),
+  (t) => [unique().on(t.groupId, t.name)],
 );
 
 export const contentsTable = pgTable("contents", {
@@ -105,8 +98,5 @@ export const contentTagsTable = pgTable(
       .notNull(),
     order: smallint("order").notNull(),
   },
-  (t) => ({
-    primary: primaryKey({ columns: [t.contentId, t.tagId] }),
-    unique1: unique().on(t.contentId, t.order),
-  }),
+  (t) => [primaryKey({ columns: [t.contentId, t.tagId] }), unique().on(t.contentId, t.order)],
 );
