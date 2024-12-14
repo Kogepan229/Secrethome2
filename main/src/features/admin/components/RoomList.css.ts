@@ -19,6 +19,10 @@ export const panel_wrapper = style({
 
 export const panel = style({
   padding: 16,
+
+  ":hover": {
+    backgroundColor: vars.color.hoverGray,
+  },
 });
 
 export const info_grid = style({
