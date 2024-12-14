@@ -5,7 +5,7 @@ import * as css from "./RoomList.css";
 import Link from "next/link";
 
 export async function RoomList() {
-  const rooms = await db.select().from(roomsTable);
+  const rooms = await db.select().from(roomsTable).orderBy(roomsTable.createdAt);
   const roomList = rooms.map((room) => {
     return (
       <div className={css.panel_wrapper} key={room.id}>
