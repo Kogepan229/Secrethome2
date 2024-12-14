@@ -1,10 +1,10 @@
 "use client";
-import { CreateRoomForm } from "@/features/admin/components/CreateRoomForm";
+import { RoomForm } from "@/features/admin/components/RoomForm";
 
 export default function AdminPage() {
   return (
     <main>
-      <CreateRoomForm />
+      <RoomForm />
     </main>
   );
 }

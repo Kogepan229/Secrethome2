@@ -13,13 +13,14 @@ import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { MessageModal } from "@/components/MessageModal";
 import { FormCustomDescriptions } from "./FormCustomDescriptions";
 
-export function CreateRoomForm() {
+export function RoomForm() {
   const [lastResult, action] = useActionState(createRoomAction, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: createRoomSchema });
     },
+    defaultValue: undefined,
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
