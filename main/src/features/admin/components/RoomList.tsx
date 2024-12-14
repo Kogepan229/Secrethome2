@@ -9,7 +9,7 @@ export async function RoomList() {
   const roomList = rooms.map((room) => {
     return (
       <div className={css.panel_wrapper} key={room.id}>
-        <Link href="/admin">
+        <Link href={`/admin/${room.id}/update`}>
           <div className={css.panel}>
             <span className={css.info_name}>{room.name}</span>
             <div className={css.info_grid}>

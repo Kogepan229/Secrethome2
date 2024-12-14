@@ -1,6 +1,6 @@
 import { type FormMetadata, getInputProps, type FieldMetadata } from "@conform-to/react";
 import type { CustomDescriptionCategory } from "../types";
-import type { CreateRoomSchema } from "../schema";
+import type { CreateRoomSchema, UpdateRoomSchema } from "../schema";
 import ArrowUpIcon from "@/assets/button/arrow_up.svg";
 import ArrowDownIcon from "@/assets/button/arrow_down.svg";
 import TrashIcon from "@/assets/button/trash.svg";
@@ -9,15 +9,15 @@ import * as css from "./FormCustomDescriptions.css";
 import { createId } from "@paralleldrive/cuid2";
 import { useMemo } from "react";
 
-function FormCustomDescriptionRow({
+function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSchema>({
   form,
   categories,
   category,
   index,
 }: {
-  form: FormMetadata<CreateRoomSchema, string[]>;
-  categories: FieldMetadata<CustomDescriptionCategory[] | null | undefined, CreateRoomSchema, string[]>;
-  category: FieldMetadata<CustomDescriptionCategory, CreateRoomSchema, string[]>;
+  form: FormMetadata<Schema, string[]>;
+  categories: FieldMetadata<CustomDescriptionCategory[] | null | undefined, Schema, string[]>;
+  category: FieldMetadata<CustomDescriptionCategory, Schema, string[]>;
   index: number;
 }) {
   const categoryFields = category.getFieldset();
@@ -62,12 +62,12 @@ function FormCustomDescriptionRow({
   );
 }
 
-export function FormCustomDescriptions({
+export function FormCustomDescriptions<Schema extends CreateRoomSchema | UpdateRoomSchema>({
   form,
   field,
 }: {
-  form: FormMetadata<CreateRoomSchema, string[]>;
-  field: FieldMetadata<CustomDescriptionCategory[] | null | undefined, CreateRoomSchema, string[]>;
+  form: FormMetadata<Schema, string[]>;
+  field: FieldMetadata<CustomDescriptionCategory[] | null | undefined, Schema, string[]>;
 }) {
   const categories = field.getFieldList();
   const categoryElements = categories.map((category, index) => {
