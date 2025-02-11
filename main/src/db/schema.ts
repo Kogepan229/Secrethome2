@@ -1,7 +1,7 @@
 import type { CustomDescriptionCategory } from "@/features/admin/types";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { pgTable, text, timestamp, pgEnum, smallint, unique, primaryKey, jsonb } from "drizzle-orm/pg-core";
+import { jsonb, pgEnum, pgTable, primaryKey, smallint, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 export const adminTable = pgTable("admin", {
   password: text("").notNull(),
@@ -70,6 +70,7 @@ export const tagsTable = pgTable(
   (t) => [unique().on(t.groupId, t.name)],
 );
 
+export const contentStatusTypeEnum = pgEnum("content_status_type", ["processing", "available", "deleted", "error"]);
 export const contentsTable = pgTable("contents", {
   id: text("id")
     .primaryKey()
@@ -80,8 +81,11 @@ export const contentsTable = pgTable("contents", {
     .notNull(),
   title: text("title").notNull(),
   description: text("description"),
+  status: contentStatusTypeEnum("status")
+    .$default(() => "processing")
+    .notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .$onUpdate(() => sql`now()`)
     .notNull(),
