@@ -4,16 +4,13 @@
   "private": true,
   "engines": {
     "npm": "please use pnpm instead",
-    "pnpm": "9.15.4"
+    "pnpm": "10.3.0"
   },
-  "packageManager": "pnpm@9.15.4",
-  "scripts": {
-    "dev": "pnpm -F main run dev",
-    "build": "pnpm -F main next build",
-    "start": "-pnpm -F main next start",
-    "lint": "pnpm -F main next lint"
-  },
+  "packageManager": "pnpm@10.3.0",
   "devDependencies": {
     "@biomejs/biome": "1.9.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp"]
   }
 }
