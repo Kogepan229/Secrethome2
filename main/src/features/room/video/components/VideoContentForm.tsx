@@ -12,7 +12,9 @@ import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
+import { useProgressBar } from "@/components/form/ProgressBar";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
+import axios from "axios";
 
 export type VideoContentFormProps = {
   roomId: string;
@@ -24,12 +26,9 @@ export type VideoContentFormProps = {
 };
 
 export function VideoContentForm(props: VideoContentFormProps) {
-  // const [lastResult, action] = useActionState(
-  //   props.inititlValue === undefined ? uploadVideoContentAction : uploadVideoContentAction,
-  //   undefined,
-  // );
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  // const [lastResult, action] = useActionState(undefined as any, undefined);
+  const [isUploading, setIsUploading] = useState(false);
+  const { focusProgressBar, progressBar, onProgress } = useProgressBar(isUploading);
+
   const [lastResult, setLastResult] = useState<SubmissionResult<string[]> | null>(null);
   const [form, fields] = useForm({
     lastResult,
@@ -41,14 +40,18 @@ export function VideoContentForm(props: VideoContentFormProps) {
     shouldRevalidate: "onInput",
     onSubmit: async (e, c) => {
       e.preventDefault();
+      setIsUploading(true);
+      focusProgressBar();
 
-      const response = await fetch("/api/contents/video", {
-        method: "POST",
-        body: c.formData,
-      });
-
-      const responseData = (await response.json()) as SubmissionResult<string[]>;
-      setLastResult(responseData);
+      axios
+        .post<SubmissionResult<string[]>>("/api/contents/video", c.formData, { onUploadProgress: onProgress })
+        .then((res) => {
+          setLastResult(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+          setIsUploading(false);
+        });
     },
   });
   usePreventResetForm(form);
@@ -62,12 +65,13 @@ export function VideoContentForm(props: VideoContentFormProps) {
         <FormInputVideo videoField={fields.video} thumbnailField={fields.thumbnail} />
         <FormHidden field={fields.roomId} />
         <FormBottom formErrors={form.errors}>
+          {progressBar}
           <FormSubmitCalcel
             cancelText={props.backText}
             hrefCancel={props.backUrl}
             submitText={props.submitText}
             dirty={form.dirty}
-            disabled={!uploadVideoContentSchema.safeParse(form.value).success}
+            disabled={!uploadVideoContentSchema.safeParse(form.value).success || isUploading}
           />
         </FormBottom>
       </Form>
