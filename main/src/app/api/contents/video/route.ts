@@ -3,8 +3,7 @@ import { contentsTable } from "@/db/schema";
 import { saveThumbnail } from "@/features/room/common/utils/file";
 import { uploadVideoContentSchema } from "@/features/room/video/schema";
 import { parseWithZod } from "@conform-to/zod";
-import { createId } from "@paralleldrive/cuid2";
-import { after, NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse, after } from "next/server";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
