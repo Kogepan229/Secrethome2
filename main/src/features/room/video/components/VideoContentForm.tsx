@@ -7,7 +7,7 @@ import { FormInputVideo } from "./FormInputVideo";
 
 import { MessageModal } from "@/components/MessageModal";
 import { Form } from "@/components/form/Form";
-import { ErrorMessage } from "@/components/form/FormErrorMessage";
+import { FormBottom } from "@/components/form/FormBottom";
 import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
@@ -57,18 +57,19 @@ export function VideoContentForm(props: VideoContentFormProps) {
   return (
     <>
       <Form {...getFormProps(form)}>
-        <ErrorMessage message={form.errors} />
         <FormInputText label="タイトル" field={fields.title} />
         <FormInputTextArea label="概要" field={fields.description} />
         <FormInputVideo videoField={fields.video} thumbnailField={fields.thumbnail} />
         <FormHidden field={fields.roomId} />
-        <FormSubmitCalcel
-          cancelText={props.backText}
-          hrefCancel={props.backUrl}
-          submitText={props.submitText}
-          dirty={form.dirty}
-          disabled={!uploadVideoContentSchema.safeParse(form.value).success}
-        />
+        <FormBottom formErrors={form.errors}>
+          <FormSubmitCalcel
+            cancelText={props.backText}
+            hrefCancel={props.backUrl}
+            submitText={props.submitText}
+            dirty={form.dirty}
+            disabled={!uploadVideoContentSchema.safeParse(form.value).success}
+          />
+        </FormBottom>
       </Form>
       <MessageModal
         open={form.status === "success"}

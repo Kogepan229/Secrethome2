@@ -76,6 +76,13 @@ export const select = style({
   },
 });
 
+export const bottom_container = style({
+  borderTop: "1px solid",
+  borderTopColor: vars.color.borderDarkGray,
+  marginTop: "32px",
+  paddingTop: "4px",
+});
+
 export const error_message = style({
   padding: "0px 4px 0px 4px",
   color: vars.color.error,
@@ -86,7 +93,7 @@ export const error_message = style({
 export const action_container = style({
   display: "flex",
   width: "100%",
-  marginTop: "32px",
+  marginTop: "8px",
   justifyContent: "space-between",
 });
 

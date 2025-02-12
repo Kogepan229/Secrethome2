@@ -5,7 +5,7 @@ import { useActionState } from "react";
 
 import { MessageModal } from "@/components/MessageModal";
 import { Form } from "@/components/form/Form";
-import { ErrorMessage } from "@/components/form/FormErrorMessage";
+import { FormBottom } from "@/components/form/FormBottom";
 import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
@@ -40,7 +40,6 @@ export function RoomForm(props: RoomFormProps) {
   return (
     <>
       <Form {...getFormProps(form)} action={action}>
-        <ErrorMessage message={form.errors} />
         <FormInputText label="ID" field={fields.id} />
         <FormInputText label="名前" field={fields.name} />
         <FormInputTextArea label="概要" field={fields.description} />
@@ -55,13 +54,15 @@ export function RoomForm(props: RoomFormProps) {
         <FormCustomDescriptions form={form} field={fields.customDescriptionList} />
         <FormInputText label="Access Key" field={fields.accessKey} />
         {props.inititlValue === undefined ? null : <FormHidden field={fields.id} />}
-        <FormSubmitCalcel
-          cancelText={props.backText}
-          hrefCancel={props.backUrl}
-          submitText={props.submitText}
-          dirty={form.dirty}
-          disabled={!createRoomSchema.safeParse(form.value).success}
-        />
+        <FormBottom formErrors={form.errors}>
+          <FormSubmitCalcel
+            cancelText={props.backText}
+            hrefCancel={props.backUrl}
+            submitText={props.submitText}
+            dirty={form.dirty}
+            disabled={!createRoomSchema.safeParse(form.value).success}
+          />
+        </FormBottom>
       </Form>
       <MessageModal open={form.status === "success"} message={props.successMessage} closeText={props.backText} onClose={props.backUrl} />
     </>
