@@ -4,7 +4,7 @@ import { sql } from "drizzle-orm";
 import { jsonb, pgEnum, pgTable, primaryKey, smallint, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 export const adminTable = pgTable("admin", {
-  password: text("").notNull(),
+  password: text("password").notNull(),
 });
 
 export const roomTypeEnum = pgEnum("room_type", ["video", "image"]);
