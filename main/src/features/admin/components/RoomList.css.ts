@@ -5,14 +5,14 @@ export const container = style({
   marginBottom: 48,
   border: "1px solid",
   borderRadius: "4px",
-  borderColor: vars.color.borderGray,
+  borderColor: vars.color.borderLightGray,
 });
 
 export const panel_wrapper = style({
   selectors: {
     "div+&": {
       borderTop: "1px solid",
-      borderColor: vars.color.borderGray,
+      borderColor: vars.color.borderLightGray,
     },
   },
 });

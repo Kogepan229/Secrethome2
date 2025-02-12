@@ -1,5 +1,5 @@
-import { style } from "@vanilla-extract/css";
 import { vars } from "@/theme.css";
+import { style } from "@vanilla-extract/css";
 
 export const input_video = style({
   appearance: "none",
@@ -34,7 +34,7 @@ export const empty_thumbnail_area = style({
   marginTop: 4,
   aspectRatio: "16 / 9",
   border: "2px solid",
-  borderColor: vars.color.borderGray,
+  borderColor: vars.color.borderLightGray,
   borderRadius: 8,
   justifyContent: "center",
   color: vars.color.textBlack,
