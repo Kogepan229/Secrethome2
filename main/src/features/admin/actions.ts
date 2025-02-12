@@ -1,10 +1,10 @@
 "use server";
-import { parseWithZod } from "@conform-to/zod";
-import { createRoomSchema, updateRoomSchema } from "./schema";
-import { roomsTable } from "@/db/schema";
 import { db } from "@/db/db";
-import { DatabaseError } from "pg";
+import { roomsTable } from "@/db/schema";
+import { parseWithZod } from "@conform-to/zod";
 import { eq } from "drizzle-orm";
+import { DatabaseError } from "pg";
+import { createRoomSchema, updateRoomSchema } from "./schema";
 
 export async function createRoomAction(_prev: unknown, formData: FormData) {
   const submission = parseWithZod(formData, { schema: createRoomSchema });
@@ -17,6 +17,9 @@ export async function createRoomAction(_prev: unknown, formData: FormData) {
     return submission.reply();
   } catch (e) {
     if (e instanceof DatabaseError) {
+      if (e.constraint === "rooms_pkey") {
+        return submission.reply({ fieldErrors: { id: ["指定されたIDは既に使用されています"] } });
+      }
       if (e.constraint === "rooms_access_key_unique") {
         return submission.reply({ fieldErrors: { accessKey: ["指定されたキーは既に使用されています"] } });
       }

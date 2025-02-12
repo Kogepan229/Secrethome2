@@ -9,10 +9,7 @@ export const adminTable = pgTable("admin", {
 
 export const roomTypeEnum = pgEnum("room_type", ["video", "image"]);
 export const roomsTable = pgTable("rooms", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => createId())
-    .notNull(),
+  id: text("id").primaryKey().notNull(),
   name: text("name").notNull(),
   description: text("description"),
   customDescriptionList: jsonb("custom_description_list").$type<CustomDescriptionCategory[]>().default([]),

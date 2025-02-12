@@ -15,6 +15,7 @@ export const createRoomSchema = createInsertSchema(roomsTable, {
     .nullish(),
   accessKey: (schema) => schema.trim().min(1, "1文字以上必要です"),
 }).pick({
+  id: true,
   name: true,
   description: true,
   customDescriptionList: true,

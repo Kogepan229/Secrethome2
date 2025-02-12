@@ -1,18 +1,20 @@
 "use client";
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import { createRoomSchema, updateRoomSchema, type UpdateRoomSchema } from "../schema";
 import { useActionState } from "react";
+
+import { MessageModal } from "@/components/MessageModal";
+import { Form } from "@/components/form/Form";
+import { ErrorMessage } from "@/components/form/FormErrorMessage";
+import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
-import { Form } from "@/components/form/Form";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
-import { MessageModal } from "@/components/MessageModal";
-import { FormCustomDescriptions } from "./FormCustomDescriptions";
 import { createRoomAction, updateRoomAction } from "../actions";
-import { FormHidden } from "@/components/form/FormHidden";
+import { type UpdateRoomSchema, createRoomSchema, updateRoomSchema } from "../schema";
+import { FormCustomDescriptions } from "./FormCustomDescriptions";
 
 export type RoomFormProps = {
   inititlValue?: UpdateRoomSchema;
@@ -38,6 +40,8 @@ export function RoomForm(props: RoomFormProps) {
   return (
     <>
       <Form {...getFormProps(form)} action={action}>
+        <ErrorMessage message={form.errors} />
+        <FormInputText label="ID" field={fields.id} />
         <FormInputText label="名前" field={fields.name} />
         <FormInputTextArea label="概要" field={fields.description} />
         <FormSelect
