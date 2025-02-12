@@ -1,21 +1,13 @@
 "use client";
 import type { AxiosProgressEvent } from "axios";
-import { useCallback, useMemo, useState } from "react";
-
-const ProgressBar = ({ progress }: { progress: number }) => {
-  return (
-    <div id="progress_bar">
-      <p>{progress}%</p>
-      <progress value={progress} max="100" />
-    </div>
-  );
-};
+import { useCallback, useMemo, useRef, useState } from "react";
 
 export const useProgressBar = (enabled: boolean) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
 
   const focusProgressBar = useCallback(() => {
-    window.location.hash = "progress_bar";
+    scrollRef.current?.scrollIntoView();
   }, []);
 
   const onProgress = useCallback((progressEvent: AxiosProgressEvent) => {
@@ -23,7 +15,16 @@ export const useProgressBar = (enabled: boolean) => {
     setProgress(Math.round((progressEvent.loaded / progressEvent.total) * 100));
   }, []);
 
-  const progressBar = useMemo(() => (enabled ? <ProgressBar progress={progress} /> : null), [enabled, progress]);
+  const progressBar = useMemo(
+    () =>
+      enabled ? (
+        <div ref={scrollRef}>
+          <span>{progress}%</span>
+          <progress value={progress} max="100" />
+        </div>
+      ) : null,
+    [enabled, progress],
+  );
 
   return {
     focusProgressBar: focusProgressBar,
