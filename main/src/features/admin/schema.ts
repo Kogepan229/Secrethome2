@@ -44,7 +44,6 @@ export const updateRoomSchema = createSelectSchema(roomsTable, {
   name: true,
   description: true,
   customDescriptionList: true,
-  roomType: true,
   accessKey: true,
 });
 

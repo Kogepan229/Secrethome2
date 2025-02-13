@@ -6,7 +6,6 @@ import { useActionState } from "react";
 import { MessageModal } from "@/components/MessageModal";
 import { Form } from "@/components/form/Form";
 import { FormBottom } from "@/components/form/FormBottom";
-import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
@@ -25,11 +24,12 @@ export type RoomFormProps = {
 };
 
 export function RoomForm(props: RoomFormProps) {
-  const [lastResult, action] = useActionState(props.inititlValue === undefined ? createRoomAction : updateRoomAction, undefined);
+  const isUpdate = props.inititlValue !== undefined;
+  const [lastResult, action] = useActionState(isUpdate ? updateRoomAction : createRoomAction, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: props.inititlValue === undefined ? createRoomSchema : updateRoomSchema });
+      return parseWithZod(formData, { schema: isUpdate ? updateRoomSchema : createRoomSchema });
     },
     defaultValue: props.inititlValue,
     shouldValidate: "onBlur",
@@ -46,6 +46,7 @@ export function RoomForm(props: RoomFormProps) {
         <FormSelect
           label="ルームタイプ"
           field={fields.roomType}
+          disabled={isUpdate}
           options={[
             { text: "動画", value: "video" },
             { text: "画像", value: "image" },
@@ -53,14 +54,13 @@ export function RoomForm(props: RoomFormProps) {
         />
         <FormCustomDescriptions form={form} field={fields.customDescriptionList} />
         <FormInputText label="Access Key" field={fields.accessKey} />
-        {props.inititlValue === undefined ? null : <FormHidden field={fields.id} />}
         <FormBottom formErrors={form.errors}>
           <FormSubmitCalcel
             cancelText={props.backText}
             hrefCancel={props.backUrl}
             submitText={props.submitText}
             dirty={form.dirty}
-            disabled={!createRoomSchema.safeParse(form.value).success}
+            disabled={!(isUpdate ? updateRoomSchema : createRoomSchema).safeParse(form.value).success}
           />
         </FormBottom>
       </Form>
