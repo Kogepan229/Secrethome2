@@ -37,6 +37,7 @@
     "@types/react-dom": "19.0.3",
     "@vanilla-extract/next-plugin": "2.4.9",
     "drizzle-kit": "0.30.4",
+    "esbuild-register": "^3.6.0",
     "eslint": "9.20.0",
     "eslint-config-next": "15.1.7",
     "tsx": "4.19.2",
