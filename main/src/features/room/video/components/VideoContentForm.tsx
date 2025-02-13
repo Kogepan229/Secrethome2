@@ -50,6 +50,8 @@ export function VideoContentForm(props: VideoContentFormProps) {
         })
         .catch((err) => {
           console.error(err);
+        })
+        .finally(() => {
           setIsUploading(false);
         });
     },
