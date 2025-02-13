@@ -16,7 +16,7 @@ import { type UpdateRoomSchema, createRoomSchema, updateRoomSchema } from "../sc
 import { FormCustomDescriptions } from "./FormCustomDescriptions";
 
 export type RoomFormProps = {
-  inititlValue?: UpdateRoomSchema;
+  initialValue?: UpdateRoomSchema;
   backText: string;
   backUrl: string;
   submitText: string;
@@ -24,14 +24,14 @@ export type RoomFormProps = {
 };
 
 export function RoomForm(props: RoomFormProps) {
-  const isUpdate = props.inititlValue !== undefined;
+  const isUpdate = props.initialValue !== undefined;
   const [lastResult, action] = useActionState(isUpdate ? updateRoomAction : createRoomAction, undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: isUpdate ? updateRoomSchema : createRoomSchema });
     },
-    defaultValue: props.inititlValue,
+    defaultValue: props.initialValue,
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
