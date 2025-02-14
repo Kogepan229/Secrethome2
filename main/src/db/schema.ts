@@ -1,7 +1,7 @@
 import type { CustomDescriptionCategory } from "@/features/admin/types";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { jsonb, pgEnum, pgTable, primaryKey, smallint, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { jsonb, pgEnum, pgTable, primaryKey, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 export const adminTable = pgTable("admin", {
   password: text("password").notNull(),
@@ -45,7 +45,7 @@ export const tagGroupsTable = pgTable(
       .notNull(),
     name: text("name").notNull(),
     description: text("description"),
-    order: smallint("order"),
+    order: serial("order").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
   },
   (t) => [unique().on(t.roomId, t.name), unique().on(t.roomId, t.order)],
@@ -97,7 +97,7 @@ export const contentTagsTable = pgTable(
     tagId: text("tag_id")
       .references(() => tagsTable.id)
       .notNull(),
-    order: smallint("order").notNull(),
+    order: serial("order").notNull(),
   },
   (t) => [primaryKey({ columns: [t.contentId, t.tagId] }), unique().on(t.contentId, t.order)],
 );
