@@ -19,7 +19,7 @@ export default async function UpdateRoomPage({
 
   return (
     <main>
-      <RoomForm inititlValue={roomData[0]} backText="戻る" backUrl="/admin" submitText="更新" successMessage="更新しました" />
+      <RoomForm initialValue={roomData[0]} backText="戻る" backUrl="/admin" submitText="更新" successMessage="更新しました" />
     </main>
   );
 }
