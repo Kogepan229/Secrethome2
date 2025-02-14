@@ -31,6 +31,9 @@ export function RoomForm(props: RoomFormProps) {
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: isUpdate ? updateRoomSchema : createRoomSchema });
     },
+    onSubmit(e) {
+      e.stopPropagation();
+    },
     defaultValue: props.initialValue,
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
