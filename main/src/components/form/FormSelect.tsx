@@ -23,7 +23,7 @@ export function FormSelect(props: Props) {
     <div className={css.wrapper}>
       <label className={css.label}>
         {props.label}
-        <select {...getSelectProps(props.field)} className={css.select} disabled={props.disabled}>
+        <select {...getSelectProps(props.field)} key={props.field.key} className={css.select} disabled={props.disabled}>
           {options}
         </select>
       </label>
