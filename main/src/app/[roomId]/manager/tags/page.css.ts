@@ -1,20 +1,16 @@
 import { vars } from "@/theme.css";
-import { globalStyle, style } from "@vanilla-extract/css";
-
-globalStyle("body", {
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-});
+import { style } from "@vanilla-extract/css";
+import { calc } from "@vanilla-extract/css-utils";
 
 export const main = style({
   display: "flex",
   flexDirection: "column",
   width: "100%",
+  height: calc.subtract("100vh", vars.size.headerHeight),
   flexGrow: 1,
   flexBasis: 0,
-  marginTop: 48,
-  marginBottom: 48,
+  paddingTop: 48,
+  paddingBottom: 48,
   paddingLeft: 20,
   paddingRight: 20,
 });
