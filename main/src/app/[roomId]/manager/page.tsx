@@ -17,11 +17,14 @@ export default async function ManagerPage({
     );
   };
 
+  const { roomId } = await params;
+
   return (
     <main className={css.main}>
       <ContentsGridHeader title={"管理"} />
       <div className={css.link_item_container}>
-        <LinkItem url={`/${(await params).roomId}/manager/upload`} text={"コンテンツ追加"} />
+        <LinkItem url={`/${roomId}/manager/upload`} text={"コンテンツ追加"} />
+        <LinkItem url={`/${roomId}/manager/tags`} text={"タグ管理"} />
       </div>
     </main>
   );

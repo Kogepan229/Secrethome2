@@ -48,20 +48,25 @@ export const tag_group_container = style({
 });
 
 export const tag_group_item_wrapper = style({
+  ":hover": {
+    backgroundColor: vars.color.hoverGray,
+  },
+  ":active": {
+    backgroundColor: vars.color.activeGray,
+  },
   selectors: {
     "div+&": {
       borderTop: "1px solid",
       borderColor: vars.color.borderLightGray,
+    },
+    '&[data-selected="true"]': {
+      backgroundColor: vars.color.activeGray,
     },
   },
 });
 
 export const tag_group_item = style({
   padding: 8,
-
-  ":hover": {
-    backgroundColor: vars.color.hoverGray,
-  },
 });
 
 export const tag_group_item_name = style({
@@ -77,4 +82,12 @@ export const tag_group_item_desc = style({
   marginTop: 4,
   fontSize: 14,
   color: vars.color.textMutedGray,
+});
+
+export const tag_container = style({
+  width: "100%",
+  border: "1px solid",
+  borderRadius: "4px",
+  borderColor: vars.color.borderLightGray,
+  overflowY: "auto",
 });
