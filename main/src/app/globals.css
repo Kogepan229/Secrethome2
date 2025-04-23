@@ -29,15 +29,6 @@
 @utility bg-active-gray {
   background-color: #dbdbdb;
 }
-/* @utility border-primary {
-  border-color: #1ca1b6;
-}
-@utility border-gray {
-  border-color: #d0d0d0;
-}
-@utility border-dark-gray {
-  border-color: #9e9e9e;
-} */
 @utility text-black-primary {
   color: #404040
 }
