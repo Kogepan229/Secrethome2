@@ -1,7 +1,7 @@
 "use client";
 import { type FieldMetadata, getInputProps } from "@conform-to/react";
 import { ErrorMessage } from "./FormErrorMessage";
-import * as css from "./form.css";
+import { formStyles } from "./formStyles";
 
 type Props = {
   label: string;
@@ -10,15 +10,15 @@ type Props = {
 
 export function FormInputText(props: Props) {
   return (
-    <div className={css.wrapper}>
-      <label className={css.label}>
-        {props.label}
+    <div className={formStyles.wrapper()}>
+      <label>
+        <span className={formStyles.label()}>{props.label}</span>
         <input
           {...getInputProps(props.field, { type: "text" })}
           spellCheck="false"
           autoComplete="off"
           key={props.field.key}
-          className={css.input_text}
+          className="w-full h-7 p-1 outline-none border border-border-dark-gray rounded-sm text-base focus:border-border-primary focus:shadow-sm"
         />
       </label>
       <ErrorMessage message={props.field.errors} />

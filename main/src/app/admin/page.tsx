@@ -1,16 +1,14 @@
+import { BasicButton } from "@/components/BasicButton";
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
-import * as css from "./page.css";
-import Link from "next/link";
 import { RoomList } from "@/features/admin/components/RoomList";
+import Link from "next/link";
 
 export default function AdminPage() {
   return (
-    <main className={css.main}>
+    <main className="w-[60%] m-auto mt-12">
       <ContentsGridHeader title="ルームリスト" />
       <Link href="/admin/create">
-        <button type="button" className={css.create_button}>
-          新規作成
-        </button>
+        <BasicButton className="w-fit my-2">新規作成</BasicButton>
       </Link>
       <RoomList />
     </main>

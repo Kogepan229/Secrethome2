@@ -3,7 +3,6 @@ import { tagGroupsTable, tagsTable } from "@/db/schema";
 import { TagCreateForm } from "@/features/room/tag/components/TagCreateForm";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
-import * as css from "./page.css";
 
 function TagGroupItem({
   roomId,
@@ -13,11 +12,14 @@ function TagGroupItem({
   selected,
 }: { roomId: string; id: string; name: string; description: string | null; selected: boolean }) {
   return (
-    <div className={css.tag_group_item_wrapper} data-selected={selected}>
+    <div
+      className="hover:bg-hover-gray active:bg-active-gray [div+&]:border-t [div+&]:border-t-border-light-gray data-[selected=true]:bg-active-gray"
+      data-selected={selected}
+    >
       <Link href={`/${roomId}/manager/tags?id=${id}`}>
-        <div className={css.tag_group_item}>
-          <span className={css.tag_group_item_name}>{name}</span>
-          <span className={css.tag_group_item_desc}>{description}</span>
+        <div className="p-2">
+          <span className="block font-bold text-black-primary">{name}</span>
+          <span className="block h-4 mt-1 leading-4 text-sm text-disabled-gray">{description}</span>
           {/* <span className={css.tag_group_item_desc}>これは概要</span> */}
         </div>
       </Link>
@@ -52,12 +54,12 @@ async function TagGroupInfo({ tagGroupId }: { tagGroupId: string | undefined }) 
 
   return (
     <>
-      <span className={css.item_header}>タググループ情報</span>
+      <span className="block my-1 text-primary text-lg font-bold">タググループ情報</span>
       <span>{tagGroup.name}</span>
       <span>{tagGroup.description}</span>
-      <span className={css.item_header}>タグ追加</span>
+      <span className="block my-1 text-primary text-lg font-bold">タグ追加</span>
       <TagCreateForm tagGroupId={tagGroupId} />
-      <span className={css.item_header}>タグリスト</span>
+      <span className="block my-1 text-primary text-lg font-bold">タグリスト</span>
       <TagList tagGroupId={tagGroupId} />
     </>
   );
@@ -86,13 +88,13 @@ export default async function TagsManagerPage({
   ));
 
   return (
-    <main className={css.main}>
-      <div className={css.item_container}>
-        <div className={css.list_container}>
-          <span className={css.item_header}>タググループリスト</span>
-          <div className={css.tag_group_container}>{tagGroupElements}</div>
+    <main className="flex flex-col w-full h-[calc(100vh-var(--h-header))] grow basis-0 px-5 py-12">
+      <div className="flex grow basis-0 overflow-y-hidden gap-5">
+        <div className="flex flex-col grow basis-0 w-full">
+          <span className="block my-1 text-primary text-lg font-bold">タググループリスト</span>
+          <div className="w-full border rounded-sm border-border-light-gray overflow-y-auto">{tagGroupElements}</div>
         </div>
-        <div className={css.list_container}>
+        <div className="flex flex-col grow basis-0 w-full">
           <TagGroupInfo tagGroupId={selectedId} />
           {/* <span className={css.item_header}>タグリスト</span> */}
           {/* <div className={css.tag_group_container}>{tagGroups}</div> */}

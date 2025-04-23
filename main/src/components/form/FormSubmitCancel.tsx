@@ -1,5 +1,5 @@
 import Link from "next/link";
-import * as css from "./form.css";
+import { BasicButton } from "../BasicButton";
 
 export function FormSubmitCalcel({
   cancelText,
@@ -18,15 +18,15 @@ export function FormSubmitCalcel({
   }
 
   return (
-    <div className={css.action_container}>
+    <div className="flex w-full mt-2 justify-between">
       <Link href={hrefCancel}>
-        <button type="button" onClick={handleClickCancel} className={css.cancel_button}>
+        <BasicButton type="button" onClick={handleClickCancel} color="whiteRed" className="w-fit min-w-15">
           {cancelText}
-        </button>
+        </BasicButton>
       </Link>
-      <button type="submit" className={css.submit_button} disabled={disabled}>
+      <BasicButton type="submit" disabled={disabled} className="w-fit min-w-15">
         {submitText}
-      </button>
+      </BasicButton>
     </div>
   );
 }

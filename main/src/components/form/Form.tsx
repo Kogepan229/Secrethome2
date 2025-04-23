@@ -1,7 +1,6 @@
 "use client";
 import type { DetailedHTMLProps, FormHTMLAttributes } from "react";
-import * as css from "./form.css";
 
 export function Form(props: DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) {
-  return <form {...props} className={css.form} />;
+  return <form {...props} className=" max-w-125 m-auto mb-10 px-5" />;
 }

@@ -1,14 +1,13 @@
 import Link from "next/link";
-import * as css from "./RoomHeader.css";
 
 export const RoomHeader = ({ roomName, link }: { roomName: string; link: string }) => {
   return (
-    <header className={css.room_header}>
+    <header className="flex w-full h-header relative justify-center bg-primary">
       <Link href={"/"}>
-        <div className={css.logo}>Secret Home</div>
+        <div className="absolute left-5 text-white-primary leading-(--h-header) text-2xl cursor-pointer font-oswald">Secret Home</div>
       </Link>
       <Link href={link}>
-        <div className={css.room_name}>{roomName}</div>
+        <div className="text-white-primary leading-(--h-header) text-2xl cursor-pointer font-oswald">{roomName}</div>
       </Link>
     </header>
   );

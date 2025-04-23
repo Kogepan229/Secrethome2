@@ -1,6 +1,5 @@
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
 import Link from "next/link";
-import * as css from "./page.css";
 
 export default async function ManagerPage({
   params,
@@ -9,9 +8,9 @@ export default async function ManagerPage({
 }) {
   const LinkItem = ({ url, text }: { url: string; text: string }) => {
     return (
-      <div className={css.link_item_wrapper}>
+      <div className="[div+&]:border-t [div+&]:border-t-border-gray">
         <Link href={url}>
-          <div className={css.link_item}>{text}</div>
+          <div className="pl-5 leading-12">{text}</div>
         </Link>
       </div>
     );
@@ -20,9 +19,9 @@ export default async function ManagerPage({
   const { roomId } = await params;
 
   return (
-    <main className={css.main}>
+    <main className="max-w-125 m-auto my-12 px-5">
       <ContentsGridHeader title={"管理"} />
-      <div className={css.link_item_container}>
+      <div className="border border-border-gray">
         <LinkItem url={`/${roomId}/manager/upload`} text={"コンテンツ追加"} />
         <LinkItem url={`/${roomId}/manager/tags`} text={"タグ管理"} />
       </div>

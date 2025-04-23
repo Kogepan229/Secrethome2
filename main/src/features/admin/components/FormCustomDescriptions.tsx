@@ -1,13 +1,13 @@
-import { type FormMetadata, getInputProps, type FieldMetadata } from "@conform-to/react";
-import type { CustomDescriptionCategory } from "../types";
-import type { CreateRoomSchema, UpdateRoomSchema } from "../schema";
-import ArrowUpIcon from "@/assets/button/arrow_up.svg";
 import ArrowDownIcon from "@/assets/button/arrow_down.svg";
+import ArrowUpIcon from "@/assets/button/arrow_up.svg";
 import TrashIcon from "@/assets/button/trash.svg";
-import * as cssForm from "@/components/form/form.css";
-import * as css from "./FormCustomDescriptions.css";
+import { BasicButton } from "@/components/BasicButton";
+import { formStyles } from "@/components/form/formStyles";
+import { type FieldMetadata, type FormMetadata, getInputProps } from "@conform-to/react";
 import { createId } from "@paralleldrive/cuid2";
 import { useMemo } from "react";
+import type { CreateRoomSchema, UpdateRoomSchema } from "../schema";
+import type { CustomDescriptionCategory } from "../types";
 
 function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSchema>({
   form,
@@ -24,39 +24,43 @@ function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSc
   const id = useMemo(() => createId(), []);
 
   return (
-    <li key={category.key} className={css.list_item}>
+    <li key={category.key} className="flex w-full my-1">
       <input type="hidden" name={categoryFields.id.name} value={id} key={categoryFields.id.key} />
-      <input {...getInputProps(categoryFields.label, { type: "text" })} key={categoryFields.label.key} className={cssForm.input_text} />
-      <div className={css.button_container}>
-        <button
+      <input
+        {...getInputProps(categoryFields.label, { type: "text" })}
+        key={categoryFields.label.key}
+        className="w-full h-7 p-1 outline-none border border-border-dark-gray rounded-sm text-base focus:border-border-primary focus:shadow-sm"
+      />
+      <div className="flex gap-1 ml-1">
+        <BasicButton
           {...form.reorder.getButtonProps({
             name: categories.name,
             from: index,
             to: index - 1,
           })}
-          className={css.button}
+          className="w-7 h-7 rounded-sm p-[5px]"
         >
           <ArrowUpIcon width={16} height={16} />
-        </button>
-        <button
+        </BasicButton>
+        <BasicButton
           {...form.reorder.getButtonProps({
             name: categories.name,
             from: index,
             to: index + 1,
           })}
-          className={css.button}
+          className="w-7 h-7 rounded-sm p-[5px]"
         >
           <ArrowDownIcon width={16} height={16} />
-        </button>
-        <button
+        </BasicButton>
+        <BasicButton
           {...form.remove.getButtonProps({
             name: categories.name,
             index,
           })}
-          className={css.button}
+          className="w-7 h-7 rounded-sm p-[5px]"
         >
           <TrashIcon width={16} height={16} />
-        </button>
+        </BasicButton>
       </div>
     </li>
   );
@@ -73,21 +77,20 @@ export function FormCustomDescriptions<Schema extends CreateRoomSchema | UpdateR
   const categoryElements = categories.map((category, index) => {
     return <FormCustomDescriptionRow form={form} categories={field} category={category} index={index} key={category.key} />;
   });
-  console.log(form.value);
 
   return (
-    <div className={cssForm.wrapper}>
-      <span className={cssForm.label}>カスタム概要カテゴリ</span>
-      <div className={css.container}>
-        <button
+    <div className={formStyles.wrapper()}>
+      <span className={formStyles.label()}>カスタム概要カテゴリ</span>
+      <div className="p-1 border border-border-dark-gray rounded-sm">
+        <BasicButton
           {...form.insert.getButtonProps({
             name: field.name,
           })}
-          className={css.add_button}
+          className="h-8 leading-4 my-1"
         >
           カテゴリ追加
-        </button>
-        <ul className={css.list}>{categoryElements}</ul>
+        </BasicButton>
+        <ul className="">{categoryElements}</ul>
       </div>
     </div>
   );

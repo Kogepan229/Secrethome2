@@ -1,7 +1,7 @@
 "use client";
 import { type FieldMetadata, getSelectProps } from "@conform-to/react";
 import { ErrorMessage } from "./FormErrorMessage";
-import * as css from "./form.css";
+import { formStyles } from "./formStyles";
 
 type Props = {
   label: string;
@@ -20,10 +20,15 @@ export function FormSelect(props: Props) {
   });
 
   return (
-    <div className={css.wrapper}>
-      <label className={css.label}>
-        {props.label}
-        <select {...getSelectProps(props.field)} key={props.field.key} className={css.select} disabled={props.disabled}>
+    <div className={formStyles.wrapper()}>
+      <label>
+        <span className={formStyles.label()}>{props.label}</span>
+        <select
+          {...getSelectProps(props.field)}
+          key={props.field.key}
+          disabled={props.disabled}
+          className="w-full outline-none border border-border-dark-gray rounded-sm font-normal focus:border-border-primary focus:shadow-sm"
+        >
           {options}
         </select>
       </label>

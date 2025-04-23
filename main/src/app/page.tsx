@@ -1,15 +1,15 @@
 "use client";
+import { BasicButton } from "@/components/BasicButton";
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
-import Link from "next/link";
-import * as css from "./page.css";
 import { Form } from "@/components/form/Form";
 import { FormInputText } from "@/components/form/FormInputText";
 import { accessRoomAction } from "@/features/room/common/actions";
-import { useActionState } from "react";
-import { parseWithZod } from "@conform-to/zod";
 import { accessRoomSchema } from "@/features/room/common/schema";
-import { getFormProps, useForm } from "@conform-to/react";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
+import { getFormProps, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import Link from "next/link";
+import { useActionState } from "react";
 
 export default function Home() {
   const [lastResult, action] = useActionState(accessRoomAction, undefined);
@@ -25,18 +25,18 @@ export default function Home() {
 
   return (
     <div>
-      <header className={css.header}>
+      <header className="flex justify-center w-full h-header bg-primary">
         <Link href={"/"}>
-          <div className={css.header_logo}>Secret Home</div>
+          <div className="font-oswald text-white-primary text-2xl leading-(--h-header) cursor-pointer ">Secret Home</div>
         </Link>
       </header>
-      <main className={css.main}>
+      <main className="w-[60%] m-auto mt-12">
         <ContentsGridHeader title="ルームアクセス" />
         <Form {...getFormProps(form)} action={action}>
           <FormInputText field={fields.accessKey} label="key" />
-          <button type="submit" className={css.submit_button} disabled={!accessRoomSchema.safeParse(form.value).success}>
+          <BasicButton type="submit" className="mt-8 w-full" disabled={!accessRoomSchema.safeParse(form.value).success}>
             アクセス
-          </button>
+          </BasicButton>
         </Form>
       </main>
     </div>

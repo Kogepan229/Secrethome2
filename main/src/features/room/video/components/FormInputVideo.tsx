@@ -3,8 +3,7 @@ import { type FieldMetadata, getInputProps } from "@conform-to/react";
 import { type ChangeEvent, useRef, useState } from "react";
 
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
-import * as formCss from "@/components/form/form.css";
-import * as css from "./FormInputVideo.css";
+import { formStyles } from "@/components/form/formStyles";
 
 export function FormInputVideo({ videoField, thumbnailField }: { videoField: FieldMetadata; thumbnailField: FieldMetadata }) {
   const [thumbnailSrc, setThumbnailSrc] = useState<string | undefined>(undefined);
@@ -54,38 +53,34 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
 
   return (
     <>
-      <div className={formCss.wrapper}>
-        <label className={formCss.label}>
-          {"動画ファイル"}
-          <input
-            {...getInputProps(videoField, { type: "file" })}
-            accept="video/*"
-            className={css.input_video}
-            onChange={handleOnChangeVideo}
-          />
-        </label>
+      <div className={formStyles.wrapper()}>
+        <span className={formStyles.label()}>動画ファイル</span>
+        <input
+          {...getInputProps(videoField, { type: "file" })}
+          accept="video/*"
+          className="block w-full mt-1 file:h-8 cursor-pointer file:rounded-lg file:p-1.5 file:leading-4 file:bg-white file:border file:border-border-primary file:text-black hover:file:bg-hover-gray active:file:bg-active-gray file:cursor-pointer"
+          onChange={handleOnChangeVideo}
+        />
         <ErrorMessage message={videoField.errors} />
         {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
-        <video controls playsInline ref={videoRef} className={css.video} />
+        <video controls playsInline ref={videoRef} className="w-full mt-1" />
       </div>
       <button onClick={loadThumbnailFromVideo} type="button">
         bu
       </button>
-      <div className={formCss.wrapper}>
-        <label className={formCss.label}>
-          {"サムネイル"}
-          <input
-            {...getInputProps(thumbnailField, { type: "file" })}
-            accept="image/*"
-            className={css.input_thumbnail}
-            onChange={handleOnChangeThumbnail}
-            ref={inputThumbnailRef}
-          />
-        </label>
+      <div className={formStyles.wrapper()}>
+        <span className={formStyles.label()}>サムネイル</span>
+        <input
+          {...getInputProps(thumbnailField, { type: "file" })}
+          accept="image/*"
+          className="block w-full mt-1 file:h-8 cursor-pointer file:rounded-lg file:p-1.5 file:leading-4 file:bg-white file:border file:border-border-primary file:text-black hover:file:bg-hover-gray active:file:bg-active-gray file:cursor-pointer"
+          onChange={handleOnChangeThumbnail}
+          ref={inputThumbnailRef}
+        />
         <ErrorMessage message={thumbnailField.errors} />
         {thumbnailField.value ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumbnailSrc} alt="thumbnail" className={css.thumbnail} />
+          <img src={thumbnailSrc} alt="thumbnail" className="w-full mt-1" />
         ) : null}
       </div>
     </>

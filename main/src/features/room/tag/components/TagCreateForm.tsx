@@ -5,12 +5,12 @@ import { createId } from "@paralleldrive/cuid2";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 
+import { BasicButton } from "@/components/BasicButton";
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
 import { FormHidden } from "@/components/form/FormHidden";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { createTagAction } from "../actions";
 import { createTagSchema } from "../schema";
-import * as css from "./TagCreateForm.css";
 
 export function TagCreateForm({ tagGroupId }: { tagGroupId: string }) {
   const router = useRouter();
@@ -30,7 +30,6 @@ export function TagCreateForm({ tagGroupId }: { tagGroupId: string }) {
     shouldRevalidate: "onInput",
   });
   usePreventResetForm(form);
-  // console.log(form.value);
   useEffect(() => {
     if (lastResult?.status === "success") {
       setFormId(createId());
@@ -39,8 +38,8 @@ export function TagCreateForm({ tagGroupId }: { tagGroupId: string }) {
   }, [lastResult, router]);
 
   return (
-    <form {...getFormProps(form)} action={action} className={css.form}>
-      <div className={css.input_wrapper}>
+    <form {...getFormProps(form)} action={action} className="flex gap-2">
+      <div className="grow">
         <label>
           タグ名
           <ErrorMessage message={form.status === "error" ? (fields.name.errors ?? form.errors) : undefined} />
@@ -49,15 +48,15 @@ export function TagCreateForm({ tagGroupId }: { tagGroupId: string }) {
             spellCheck="false"
             autoComplete="off"
             key={fields.name.key}
-            className={css.input}
+            className="w-full h-6 p-1 outline-none border border-border-dark-gray rounded-sm text-base focus:border-border-primary focus:shadow-sm"
           />
         </label>
       </div>
       <FormHidden field={fields.groupId} />
-      <div className={css.button_wrapper}>
-        <button type="submit" disabled={!createTagSchema.safeParse(form.value).success} className={css.submit_button}>
+      <div className="relative w-14">
+        <BasicButton type="submit" disabled={!createTagSchema.safeParse(form.value).success} className="absolute bottom-0 w-full h-8 p-0.5">
           追加
-        </button>
+        </BasicButton>
       </div>
     </form>
   );

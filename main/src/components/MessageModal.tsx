@@ -1,7 +1,7 @@
 "use client";
-import { type MouseEventHandler, useEffect, useRef } from "react";
-import * as css from "./MessageModal.css";
 import Link from "next/link";
+import { type MouseEventHandler, useEffect, useRef } from "react";
+import { BasicButton } from "./BasicButton";
 
 export function MessageModal({
   open,
@@ -25,28 +25,26 @@ export function MessageModal({
   function CloseButton() {
     if (typeof onClose === "string") {
       return (
-        <div className={css.button_wrapper}>
+        <div className="w-fit m-auto">
           <Link href={onClose}>
-            <button type="button" className={css.button}>
-              {closeText}
-            </button>
+            <BasicButton className="min-w-16 m-auto">{closeText}</BasicButton>
           </Link>
         </div>
       );
     }
     return (
-      <div className={css.button_wrapper}>
-        <button type="button" className={css.button} onClick={onClose}>
+      <div className="w-fit m-auto">
+        <BasicButton onClick={onClose} className="min-w-16 m-auto">
           {closeText}
-        </button>
+        </BasicButton>
       </div>
     );
   }
 
   return (
-    <dialog ref={dialogRef} className={css.dialog}>
-      <div className={css.message_container}>
-        <p className={css.message}>{message}</p>
+    <dialog ref={dialogRef} className="w-150 h-75 m-auto border-none rounded-sm backdrop:bg-black/60">
+      <div className="flex h-50">
+        <p className="m-auto text-2xl font-bold text-black-primary">{message}</p>
       </div>
       <CloseButton />
     </dialog>
