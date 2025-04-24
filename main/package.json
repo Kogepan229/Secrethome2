@@ -9,7 +9,7 @@
     "lint": "next lint",
     "studio": "drizzle-kit studio",
     "push": "drizzle-kit push",
-    "seed": "pnpm node -r esbuild-register ./src/db/seed.ts"
+    "seed": "pnpm tsx ./src/db/seed.ts"
   },
   "dependencies": {
     "@conform-to/react": "1.4.0",
@@ -36,7 +36,6 @@
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "drizzle-kit": "0.31.0",
-    "esbuild-register": "^3.6.0",
     "eslint": "9.25.1",
     "eslint-config-next": "15.3.1",
     "tailwindcss": "^4",
