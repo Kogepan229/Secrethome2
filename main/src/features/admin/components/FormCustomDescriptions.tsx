@@ -38,6 +38,7 @@ function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSc
             from: index,
             to: index - 1,
           })}
+          type="submit"
           className="w-7 h-7 rounded-sm p-[5px]"
         >
           <ArrowUpIcon width={16} height={16} />
@@ -48,6 +49,7 @@ function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSc
             from: index,
             to: index + 1,
           })}
+          type="submit"
           className="w-7 h-7 rounded-sm p-[5px]"
         >
           <ArrowDownIcon width={16} height={16} />
@@ -57,6 +59,7 @@ function FormCustomDescriptionRow<Schema extends CreateRoomSchema | UpdateRoomSc
             name: categories.name,
             index,
           })}
+          type="submit"
           className="w-7 h-7 rounded-sm p-[5px]"
         >
           <TrashIcon width={16} height={16} />
@@ -86,6 +89,7 @@ export function FormCustomDescriptions<Schema extends CreateRoomSchema | UpdateR
           {...form.insert.getButtonProps({
             name: field.name,
           })}
+          type="submit"
           className="h-8 leading-4 my-1"
         >
           カテゴリ追加
