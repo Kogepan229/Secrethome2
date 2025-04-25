@@ -1,16 +1,17 @@
 "use client";
-import { createHash } from "node:crypto";
 import { createId } from "@paralleldrive/cuid2";
 import axios, { type AxiosResponse } from "axios";
+import { createSHA256 } from "hash-wasm";
 import { type MouseEvent, useRef } from "react";
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 const POOL_SIZE = 5;
 
 async function calcHash(file: File) {
-  const hash = createHash("sha256");
-
   const reader = file.stream().getReader();
+  const hash = await createSHA256();
+  hash.init();
+
   while (true) {
     const value = await reader.read();
     if (!value.value || value.done) {
@@ -18,7 +19,6 @@ async function calcHash(file: File) {
     }
     hash.update(value.value);
   }
-  // console.log("hash", hash.digest("hex"));
   return hash.digest("hex");
 }
 
