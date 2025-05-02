@@ -1,24 +1,25 @@
 "use client";
 import { createId } from "@paralleldrive/cuid2";
-import axios, { type AxiosResponse } from "axios";
 import { createSHA256 } from "hash-wasm";
+import ky, { type ResponsePromise } from "ky";
 import { type MouseEvent, useRef } from "react";
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 const POOL_SIZE = 5;
 
 async function calcHash(file: File) {
-  const reader = file.stream().getReader();
   const hash = await createSHA256();
-  hash.init();
 
-  while (true) {
-    const value = await reader.read();
-    if (!value.value || value.done) {
-      break;
-    }
-    hash.update(value.value);
-  }
+  await file.stream().pipeTo(
+    new WritableStream<Uint8Array<ArrayBufferLike>>({
+      write(chunk) {
+        return new Promise((resolve) => {
+          hash.update(chunk);
+          resolve();
+        });
+      },
+    }),
+  );
   return hash.digest("hex");
 }
 
@@ -34,18 +35,16 @@ export default function TestUploadVideoPage() {
 
     const file = files[0];
     const contentID = createId();
-
     const startData = new FormData();
     startData.append("id", contentID);
-    console.log(String(Math.ceil(file.size / CHUNK_SIZE)));
-    startData.append("totalChunk", String(Math.ceil(file.size / CHUNK_SIZE)));
-    startData.append("fileHash", await calcHash(file));
-    const res = await axios.post("http://localhost:20080/video/upload/start", startData);
-    if (res.status !== 200) {
+    startData.append("total_chunk", String(Math.ceil(file.size / CHUNK_SIZE)));
+    startData.append("hash", await calcHash(file));
+
+    const res = await ky.post<void>("http://localhost:20080/api/video/upload/start", { body: startData });
+    if (!res.ok) {
       return;
     }
-
-    const pool: Promise<AxiosResponse>[] = [];
+    const pool: ResponsePromise<void>[] = [];
     let errorOccurred = false;
     let start = 0;
     let chunkIndex = 0;
@@ -57,11 +56,10 @@ export default function TestUploadVideoPage() {
       chunkData.append("id", contentID);
       chunkData.append("index", String(chunkIndex));
       chunkData.append("chunk", chunk);
-
       start += CHUNK_SIZE;
       chunkIndex++;
 
-      const task = axios({ method: "post", url: "http://localhost:20080/video/upload/chunk", data: chunkData });
+      const task = ky.post<void>("http://localhost:20080/api/video/upload/chunk", { body: chunkData });
 
       task
         .then((res) => {
