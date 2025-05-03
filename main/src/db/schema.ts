@@ -78,6 +78,7 @@ export const contentsTable = pgTable("contents", {
     .notNull(),
   title: text("title").notNull(),
   description: text("description"),
+  thumbnailId: text("thumbnail_id"),
   status: contentStatusTypeEnum("status")
     .$default(() => "processing")
     .notNull(),
@@ -101,3 +102,10 @@ export const contentTagsTable = pgTable(
   },
   (t) => [primaryKey({ columns: [t.contentId, t.tagId] }), unique().on(t.contentId, t.order)],
 );
+
+export const contentVideoTable = pgTable("content_video_table", {
+  contentId: text("content_id")
+    .references(() => contentsTable.id)
+    .notNull(),
+  videoId: text("video_id").notNull(),
+});

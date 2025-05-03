@@ -1,7 +1,6 @@
 "use client";
 import { type SubmissionResult, getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
-import axios from "axios";
 import { useState } from "react";
 
 import { MessageModal } from "@/components/MessageModal";
@@ -13,7 +12,11 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { useProgressBar } from "@/components/form/ProgressBar";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
-import { type UploadVideoContentSchema, uploadVideoContentSchema } from "../schema";
+import { objectToFormData } from "../../common/utils/formdata";
+import { uploadThumbnail } from "../../common/utils/uploadThumbnail";
+import { submitVideoInfo } from "../actions";
+import { type UploadVideoContentSchema, uploadVideoContentInfoSchema, uploadVideoContentSchema } from "../schema";
+import { uploadVideo } from "../utils/uploadVideo";
 import { FormInputVideo } from "./FormInputVideo";
 
 export type VideoContentFormProps = {
@@ -28,32 +31,51 @@ export type VideoContentFormProps = {
 export function VideoContentForm(props: VideoContentFormProps) {
   const [isUploading, setIsUploading] = useState(false);
   const { focusProgressBar, progressBar, onProgress } = useProgressBar(isUploading);
+  const isUpdate = props.inititlValue !== undefined;
 
   const [lastResult, setLastResult] = useState<SubmissionResult<string[]> | null>(null);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: props.inititlValue === undefined ? uploadVideoContentSchema : uploadVideoContentSchema });
+      return parseWithZod(formData, { schema: isUpdate ? uploadVideoContentSchema : uploadVideoContentSchema });
     },
     defaultValue: { roomId: props.roomId },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onSubmit: async (e, c) => {
       e.preventDefault();
+
+      const info = await uploadVideoContentInfoSchema.safeParseAsync(form.value);
+      if (!info.success || !form.value || !form.value.thumbnail || !form.value.video) {
+        return;
+      }
+
       setIsUploading(true);
       focusProgressBar();
 
-      axios
-        .post<SubmissionResult<string[]>>("/api/contents/video", c.formData, { onUploadProgress: onProgress })
-        .then((res) => {
-          setLastResult(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          setIsUploading(false);
-        });
+      const resultInfo = await submitVideoInfo(objectToFormData(info.data));
+      if (resultInfo.id === null) {
+        setLastResult(resultInfo.submission);
+        setIsUploading(false);
+        return;
+      }
+
+      const resultThumbnail = await uploadThumbnail(form.value.thumbnail, resultInfo.id);
+      if (!resultThumbnail) {
+        // TODO: set error
+        setIsUploading(false);
+        return;
+      }
+
+      const resultVideo = await uploadVideo(form.value.video, resultInfo.id);
+      if (!resultVideo) {
+        // TODO: set error
+        setIsUploading(false);
+        return;
+      }
+
+      setIsUploading(false);
+      return;
     },
   });
   usePreventResetForm(form);
@@ -79,7 +101,7 @@ export function VideoContentForm(props: VideoContentFormProps) {
       </Form>
       <MessageModal
         open={form.status === "success"}
-        message={props.inititlValue ? "更新しました" : "追加しました"}
+        message={isUpdate ? "更新しました" : "追加しました"}
         closeText={"戻る"}
         onClose={`/${props.roomId}/manager`}
       />
