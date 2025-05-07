@@ -1,7 +1,9 @@
 use actix_multipart::form::{MultipartForm, tempfile::TempFile, text::Text};
 use actix_web::{HttpResponse, Responder, post, web};
 use anyhow::{Context, Result, bail};
+// use ez_ffmpeg::{FfmpegContext, Output};
 use log::{error, info};
+use sqlx::{Pool, Postgres};
 use std::{collections::HashMap, path::Path, sync::LazyLock};
 use tokio::{
     fs::{File, create_dir_all, remove_dir_all, remove_file},
@@ -95,12 +97,12 @@ pub struct VideoProcessSender {
     tx: Sender<String>,
 }
 
-pub fn start_video_processing_worker() -> VideoProcessSender {
+pub fn start_video_processing_worker(pool: Pool<Postgres>) -> VideoProcessSender {
     let (tx, mut rx) = mpsc::channel::<String>(32);
     tokio::spawn(async move {
         info!("Start video processing worker");
         while let Some(id) = rx.recv().await {
-            if let Err(e) = process_video(&id).await {
+            if let Err(e) = process_video(&id, &pool).await {
                 info!("{}", e);
             } else {
                 info!("Successful processing video id: {}", &id);
@@ -125,7 +127,12 @@ pub fn start_video_processing_worker() -> VideoProcessSender {
     VideoProcessSender { tx }
 }
 
-async fn process_video(id: &String) -> Result<()> {
+#[derive(sqlx::Type)]
+enum ContentStatusType {
+    Available,
+}
+
+async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
     let (total_chunk, original_hash) = {
         let lock = MAP.lock().await;
         match lock.get(id) {
@@ -136,11 +143,11 @@ async fn process_video(id: &String) -> Result<()> {
         }
     };
 
-    let video_dir_path = CONFIG.data_dir.join("tmp").join("video");
-    create_dir_all(&video_dir_path).await?;
+    let tmp_video_dir_path = CONFIG.data_dir.join("tmp").join("video");
+    create_dir_all(&tmp_video_dir_path).await?;
 
-    let video_path = {
-        let mut path = video_dir_path.join(id);
+    let tmp_video_path = {
+        let mut path = tmp_video_dir_path.join(id);
         path.set_extension("mp4");
         path
     };
@@ -148,10 +155,10 @@ async fn process_video(id: &String) -> Result<()> {
         let mut video_file = File::options()
             .append(true)
             .create(true)
-            .open(&video_path)
+            .open(&tmp_video_path)
             .await?;
 
-        let chunks_dir_path = video_dir_path.join("chunks").join(id);
+        let chunks_dir_path = tmp_video_dir_path.join("chunks").join(id);
         for index in 0..total_chunk {
             let mut chunk_file = File::open(chunks_dir_path.join(index.to_string())).await?;
 
@@ -160,13 +167,38 @@ async fn process_video(id: &String) -> Result<()> {
         video_file.flush().await?;
     }
 
-    let hash = hash_file(video_path.clone()).await?;
+    let hash = hash_file(tmp_video_path.clone()).await?;
     if original_hash != hash {
         error!("File hash is not match id: {}", id);
-        remove_file(&video_path).await?;
+        remove_file(&tmp_video_path).await?;
         return Ok(());
     }
     println!("hash {}", hash);
+
+    let video_dir_path = CONFIG.data_dir.join("contents").join("video").join(id);
+    let mut video_path = video_dir_path.join("original");
+    video_path.set_extension("mp4");
+
+    create_dir_all(&video_dir_path).await?;
+    tokio::fs::rename(tmp_video_path, video_path).await?;
+
+    let mut playlist_path = video_dir_path.join("playlist");
+    playlist_path.set_extension("m3u8");
+
+    // FfmpegContext::builder()
+    //     .input(video_path)
+    //     .output(Output::from(playlist_path).set_format("hls"))
+    //     .build()?
+    //     .start()?
+    //     .await?;
+
+    sqlx::query!(
+        "UPDATE contents SET status = $1 WHERE id = $2",
+        ContentStatusType::Available as _,
+        id
+    )
+    .execute(pool)
+    .await?;
 
     Ok(())
 }

@@ -1,10 +1,9 @@
-use std::{fs::File, io::BufReader};
-
 use actix_multipart::form::{MultipartForm, tempfile::TempFile, text::Text};
 use actix_web::{HttpResponse, Responder, post, web};
 use anyhow::Result;
 use image::ImageReader;
 use sqlx::{Pool, Postgres};
+use std::io::BufReader;
 use tokio::fs::create_dir_all;
 
 use crate::{config::CONFIG, error::AppError};
@@ -48,9 +47,6 @@ async fn upload_thumbnail_handler(
             .decode()?
             .thumbnail(1920, 1080)
             .save(thumbnail_path)?;
-        // image::open(form.thumbnail.file.path())?
-        //     .thumbnail(1920, 1080)
-        //     .save(thumbnail_path)?;
 
         form.thumbnail.file.close()?;
 

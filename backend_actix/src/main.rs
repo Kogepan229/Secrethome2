@@ -35,7 +35,7 @@ async fn main() -> std::io::Result<()> {
         create_dir_all(tmp_dir).await?;
     }
 
-    let sender = start_video_processing_worker();
+    let sender = start_video_processing_worker(db_pool.clone());
 
     HttpServer::new(move || {
         let mut temp_file_config = TempFileConfig::default();
