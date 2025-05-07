@@ -23,6 +23,12 @@
 @utility bg-primary {
   background-color: #0192a8;
 }
+@utility bg-hover-primary {
+  background-color: #1ca1b6
+}
+@utility bg-light-primary {
+  background-color: #4dbdce;
+}
 @utility bg-hover-gray {
   background-color: #ebebeb;
 }
