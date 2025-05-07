@@ -128,6 +128,7 @@ pub fn start_video_processing_worker(pool: Pool<Postgres>) -> VideoProcessSender
 }
 
 #[derive(sqlx::Type)]
+#[sqlx(type_name = "content_status_type", rename_all = "lowercase")]
 enum ContentStatusType {
     Available,
 }
