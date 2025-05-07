@@ -10,11 +10,15 @@ use config::CONFIG;
 use error::AppError;
 use middleware::log_internal_error;
 use tokio::fs::create_dir_all;
-use upload_video::{start_video_processing_worker, upload_video_chunk, upload_video_start};
+use upload_thumbnail::upload_thumbnail_handler;
+use upload_video::{
+    start_video_processing_worker, upload_video_chunk_handler, upload_video_start_handler,
+};
 
 mod config;
 mod error;
 mod filehash;
+mod files;
 mod middleware;
 mod upload_thumbnail;
 mod upload_video;
@@ -46,8 +50,13 @@ async fn main() -> std::io::Result<()> {
             .app_data(temp_file_config)
             .app_data(web::Data::new(db_pool.clone()))
             .app_data(web::Data::new(sender.clone()))
-            .service(upload_video_start)
-            .service(upload_video_chunk)
+            .service(actix_files::Files::new(
+                "files",
+                CONFIG.data_dir.join("contents"),
+            ))
+            .service(upload_thumbnail_handler)
+            .service(upload_video_start_handler)
+            .service(upload_video_chunk_handler)
             .service(test)
     })
     .bind(("127.0.0.1", CONFIG.port))?

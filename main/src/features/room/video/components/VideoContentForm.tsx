@@ -14,7 +14,7 @@ import { useProgressBar } from "@/components/form/ProgressBar";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { objectToFormData } from "../../common/utils/formdata";
 import { uploadThumbnail } from "../../common/utils/uploadThumbnail";
-import { submitVideoInfo } from "../actions";
+import { deleteVideoInfo, submitVideoInfo } from "../actions";
 import { type UploadVideoContentSchema, uploadVideoContentInfoSchema, uploadVideoContentSchema } from "../schema";
 import { uploadVideo } from "../utils/uploadVideo";
 import { FormInputVideo } from "./FormInputVideo";
@@ -27,6 +27,20 @@ export type VideoContentFormProps = {
   submitText: string;
   successMessage: string;
 };
+
+async function uploadMediaContents(id: string, thumbnail: File, video: File): Promise<boolean> {
+  const resultThumbnail = await uploadThumbnail(thumbnail, id);
+  if (!resultThumbnail) {
+    return false;
+  }
+
+  const resultVideo = await uploadVideo(video, id);
+  if (!resultVideo) {
+    return false;
+  }
+
+  return true;
+}
 
 export function VideoContentForm(props: VideoContentFormProps) {
   const [isUploading, setIsUploading] = useState(false);
@@ -60,20 +74,15 @@ export function VideoContentForm(props: VideoContentFormProps) {
         return;
       }
 
-      const resultThumbnail = await uploadThumbnail(form.value.thumbnail, resultInfo.id);
-      if (!resultThumbnail) {
+      const success = await uploadMediaContents(resultInfo.id, form.value.thumbnail, form.value.video);
+      if (!success) {
         // TODO: set error
+        await deleteVideoInfo(resultInfo.id);
         setIsUploading(false);
         return;
       }
 
-      const resultVideo = await uploadVideo(form.value.video, resultInfo.id);
-      if (!resultVideo) {
-        // TODO: set error
-        setIsUploading(false);
-        return;
-      }
-
+      setLastResult(resultInfo.submission);
       setIsUploading(false);
       return;
     },

@@ -1,6 +1,9 @@
+use std::{fs::File, io::BufReader};
+
 use actix_multipart::form::{MultipartForm, tempfile::TempFile, text::Text};
 use actix_web::{HttpResponse, Responder, post, web};
 use anyhow::Result;
+use image::ImageReader;
 use sqlx::{Pool, Postgres};
 use tokio::fs::create_dir_all;
 
@@ -13,7 +16,7 @@ struct UploadStart {
 }
 
 #[post("/api/thumbnail/upload")]
-async fn upload_video_start(
+async fn upload_thumbnail_handler(
     pool: web::Data<Pool<Postgres>>,
     MultipartForm(form): MultipartForm<UploadStart>,
 ) -> Result<impl Responder, AppError> {
@@ -40,9 +43,14 @@ async fn upload_video_start(
         let mut thumbnail_path = thumbnail_dir_path.join(_thumbnail_id);
         thumbnail_path.set_extension("webp");
 
-        image::open(form.thumbnail.file.path())?
+        ImageReader::new(BufReader::new(form.thumbnail.file.as_file()))
+            .with_guessed_format()?
+            .decode()?
             .thumbnail(1920, 1080)
             .save(thumbnail_path)?;
+        // image::open(form.thumbnail.file.path())?
+        //     .thumbnail(1920, 1080)
+        //     .save(thumbnail_path)?;
 
         form.thumbnail.file.close()?;
 

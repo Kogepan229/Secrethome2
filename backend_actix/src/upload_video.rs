@@ -31,7 +31,7 @@ struct UploadStart {
 }
 
 #[post("/api/video/upload/start")]
-async fn upload_video_start(
+async fn upload_video_start_handler(
     MultipartForm(form): MultipartForm<UploadStart>,
 ) -> Result<impl Responder, AppError> {
     let mut lock = MAP.lock().await;
@@ -55,7 +55,7 @@ struct UploadChunk {
 }
 
 #[post("/api/video/upload/chunk")]
-async fn upload_video_chunk(
+async fn upload_video_chunk_handler(
     proccess_sender: web::Data<VideoProcessSender>,
     MultipartForm(form): MultipartForm<UploadChunk>,
 ) -> Result<impl Responder, AppError> {

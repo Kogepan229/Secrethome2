@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import { createSHA256 } from "hash-wasm";
-import ky, { type ResponsePromise } from "ky";
+import type { ResponsePromise } from "ky";
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 const POOL_SIZE = 5;
@@ -27,7 +27,7 @@ export async function uploadVideo(file: File, contentId: string): Promise<boolea
   startData.append("total_chunk", String(Math.ceil(file.size / CHUNK_SIZE)));
   startData.append("hash", await calcHash(file));
 
-  const res = await api.post<void>("/video/upload/start", { body: startData });
+  const res = await api.post<void>("video/upload/start", { body: startData });
   if (!res.ok) {
     return false;
   }
@@ -46,7 +46,7 @@ export async function uploadVideo(file: File, contentId: string): Promise<boolea
     start += CHUNK_SIZE;
     chunkIndex++;
 
-    const task = api.post<void>("/video/upload/chunk", { body: chunkData, retry: 2 });
+    const task = api.post<void>("video/upload/chunk", { body: chunkData, retry: 2 });
 
     task
       .then(() => {

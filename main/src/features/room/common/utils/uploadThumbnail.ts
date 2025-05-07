@@ -5,6 +5,11 @@ export async function uploadThumbnail(file: File, contentId: string) {
   formdata.append("id", contentId);
   formdata.append("thumbnail", file);
 
-  const res = await api.post("/thumbnail/upload", { body: formdata });
-  return res.ok;
+  try {
+    const res = await api.post("thumbnail/upload", { body: formdata });
+    return res.ok;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
