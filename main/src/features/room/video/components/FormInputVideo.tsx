@@ -2,6 +2,7 @@
 import { type FieldMetadata, getInputProps } from "@conform-to/react";
 import { type ChangeEvent, useRef, useState } from "react";
 
+import { BasicButton } from "@/components/BasicButton";
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
 import { formStyles } from "@/components/form/formStyles";
 
@@ -65,9 +66,6 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
         {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
         <video controls playsInline ref={videoRef} className="w-full mt-1" />
       </div>
-      <button onClick={loadThumbnailFromVideo} type="button">
-        bu
-      </button>
       <div className={formStyles.wrapper()}>
         <span className={formStyles.label()}>サムネイル</span>
         <input
@@ -77,6 +75,9 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
           onChange={handleOnChangeThumbnail}
           ref={inputThumbnailRef}
         />
+        <BasicButton onClick={loadThumbnailFromVideo} className="h-8 mt-1 p-1.5 leading-4">
+          動画からセーブ
+        </BasicButton>
         <ErrorMessage message={thumbnailField.errors} />
         {thumbnailField.value ? (
           // eslint-disable-next-line @next/next/no-img-element
