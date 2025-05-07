@@ -11,6 +11,7 @@ export function ContentPanel({ content }: { content: ContentSchema }) {
             <Image
               src={`${process.env.NEXT_PUBLIC_FILES_URL}/thumbnail/${content.thumbnailId}.webp`}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover"
               alt="thumbnail"
             />
