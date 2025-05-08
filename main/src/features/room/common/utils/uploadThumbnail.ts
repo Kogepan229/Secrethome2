@@ -1,4 +1,4 @@
-import { api } from "@/utils/api";
+import { fileApi } from "@/utils/api";
 
 export async function uploadThumbnail(file: File, contentId: string) {
   const formdata = new FormData();
@@ -6,7 +6,7 @@ export async function uploadThumbnail(file: File, contentId: string) {
   formdata.append("thumbnail", file);
 
   try {
-    const res = await api.post("thumbnail/upload", { body: formdata });
+    const res = await fileApi.post("thumbnail/upload", { body: formdata });
     return res.ok;
   } catch (e) {
     console.error(e);
