@@ -14,7 +14,7 @@ struct UploadStart {
     thumbnail: TempFile,
 }
 
-#[post("/api/thumbnail/upload")]
+#[post("/file-api/thumbnail/upload")]
 async fn upload_thumbnail_handler(
     pool: web::Data<Pool<Postgres>>,
     MultipartForm(form): MultipartForm<UploadStart>,

@@ -1,3 +1,3 @@
 import ky from "ky";
 
-export const api = ky.create({ prefixUrl: "http://localhost:20080/api", retry: 1 });
+export const fileApi = ky.create({ prefixUrl: "http://localhost:20080/file-api", retry: 1 });

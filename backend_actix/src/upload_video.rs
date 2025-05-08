@@ -32,7 +32,7 @@ struct UploadStart {
     hash: Text<String>,
 }
 
-#[post("/api/video/upload/start")]
+#[post("/file-api/video/upload/start")]
 async fn upload_video_start_handler(
     MultipartForm(form): MultipartForm<UploadStart>,
 ) -> Result<impl Responder, AppError> {
@@ -56,7 +56,7 @@ struct UploadChunk {
     chunk: TempFile,
 }
 
-#[post("/api/video/upload/chunk")]
+#[post("/file-api/video/upload/chunk")]
 async fn upload_video_chunk_handler(
     proccess_sender: web::Data<VideoProcessSender>,
     MultipartForm(form): MultipartForm<UploadChunk>,
