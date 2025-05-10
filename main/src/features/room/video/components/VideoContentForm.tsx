@@ -12,6 +12,9 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { useProgressBar } from "@/components/form/ProgressBar";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
+import { submitContentTags } from "../../common/actions";
+import { FormTag } from "../../common/components/FormTag";
+import { type TagGroupSchema, type TagSchema, tagSchema } from "../../common/schema";
 import { objectToFormData } from "../../common/utils/formdata";
 import { uploadThumbnail } from "../../common/utils/uploadThumbnail";
 import { deleteVideoInfo, submitVideoInfo } from "../actions";
@@ -26,6 +29,7 @@ export type VideoContentFormProps = {
   backUrl: string;
   submitText: string;
   successMessage: string;
+  tagGroups: Promise<TagGroupSchema[]>;
 };
 
 async function uploadMediaContents(id: string, thumbnail: File, video: File): Promise<boolean> {
@@ -44,6 +48,8 @@ async function uploadMediaContents(id: string, thumbnail: File, video: File): Pr
 
 export function VideoContentForm(props: VideoContentFormProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedTagList, setSelectedTagList] = useState<TagSchema[]>([]);
+
   const { focusProgressBar, progressBar, onProgress } = useProgressBar(isUploading);
   const isUpdate = props.inititlValue !== undefined;
 
@@ -74,6 +80,17 @@ export function VideoContentForm(props: VideoContentFormProps) {
         return;
       }
 
+      const resultTags = await submitContentTags({
+        id: resultInfo.id,
+        tags: selectedTagList.map((tag) => tag.id),
+      });
+      if (!resultTags) {
+        // TODO: set error
+        await deleteVideoInfo(resultInfo.id);
+        setIsUploading(false);
+        return;
+      }
+
       const success = await uploadMediaContents(resultInfo.id, form.value.thumbnail, form.value.video);
       if (!success) {
         // TODO: set error
@@ -89,12 +106,12 @@ export function VideoContentForm(props: VideoContentFormProps) {
   });
   usePreventResetForm(form);
   console.debug(uploadVideoContentSchema.safeParse(form.value));
-
   return (
     <>
       <Form {...getFormProps(form)}>
         <FormInputText label="タイトル" field={fields.title} />
         <FormInputTextArea label="概要" field={fields.description} />
+        <FormTag label={"タグ"} tagGroups={props.tagGroups} selectedTags={selectedTagList} setSelectedTags={setSelectedTagList} />
         <FormInputVideo videoField={fields.video} thumbnailField={fields.thumbnail} />
         <FormHidden field={fields.roomId} />
         <FormBottom formErrors={form.errors}>

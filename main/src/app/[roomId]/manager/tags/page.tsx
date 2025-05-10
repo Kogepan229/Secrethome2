@@ -72,7 +72,7 @@ export default async function TagsManagerPage({
   const { roomId } = await params;
   const { id } = await searchParams;
 
-  const tagGroups = await db.select().from(tagGroupsTable).where(eq(tagGroupsTable.roomId, roomId));
+  const tagGroups = await db.select().from(tagGroupsTable).where(eq(tagGroupsTable.roomId, roomId)).orderBy(tagGroupsTable.order);
 
   const selectedId = id ?? tagGroups.at(0)?.id;
 

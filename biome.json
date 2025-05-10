@@ -14,6 +14,9 @@
       "style": {
         "useSelfClosingElements": "warn",
         "noNonNullAssertion": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off"
       }
     }
   }
