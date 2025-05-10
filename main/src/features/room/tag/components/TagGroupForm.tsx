@@ -3,6 +3,7 @@ import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { useActionState } from "react";
 
+import { FormHeader } from "@/components/FormHeader";
 import { MessageModal } from "@/components/MessageModal";
 import { Form } from "@/components/form/Form";
 import { FormBottom } from "@/components/form/FormBottom";
@@ -46,6 +47,7 @@ export function TagGroupForm(props: TagGroupFormProps) {
   return (
     <>
       <Form {...getFormProps(form)} action={action}>
+        <FormHeader title={"タググループ作成"} />
         <FormInputText label="名前" field={fields.name} />
         <FormInputTextArea label="概要" field={fields.description} />
         {isUpdate ? <FormHidden field={fields.id} /> : <FormHidden field={fields.roomId} />}

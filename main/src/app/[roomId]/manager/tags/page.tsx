@@ -3,6 +3,7 @@ import { contentTagsTable, tagGroupsTable, tagsTable } from "@/db/schema";
 import { TagCreateForm } from "@/features/room/tag/components/TagCreateForm";
 import { desc, eq, getTableColumns } from "drizzle-orm";
 import Link from "next/link";
+import { CreateTagGroupPageButton } from "./CreateTagGroupPageButton";
 import { TagManagerTagItem } from "./TagManagerTagItem";
 
 function TagGroupItem({
@@ -92,6 +93,7 @@ export default async function TagsManagerPage({
       <div className="flex grow basis-0 overflow-y-hidden gap-5">
         <div className="flex flex-col grow basis-0 w-full">
           <span className="block my-1 text-primary text-lg font-bold">タググループリスト</span>
+          <CreateTagGroupPageButton roomId={roomId} />
           <div className="w-full border rounded-sm border-border-light-gray overflow-y-auto">{tagGroupElements}</div>
         </div>
         <div className="flex flex-col grow basis-0 w-full">
