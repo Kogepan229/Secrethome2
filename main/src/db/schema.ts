@@ -93,10 +93,10 @@ export const contentTagsTable = pgTable(
   "content_tags_table",
   {
     contentId: text("content_id")
-      .references(() => contentsTable.id)
+      .references(() => contentsTable.id, { onDelete: "cascade" })
       .notNull(),
     tagId: text("tag_id")
-      .references(() => tagsTable.id)
+      .references(() => tagsTable.id, { onDelete: "cascade" })
       .notNull(),
     order: serial("order").notNull(),
   },
@@ -105,7 +105,7 @@ export const contentTagsTable = pgTable(
 
 export const contentVideoTable = pgTable("content_video_table", {
   contentId: text("content_id")
-    .references(() => contentsTable.id)
+    .references(() => contentsTable.id, { onDelete: "cascade" })
     .notNull(),
   videoId: text("video_id").notNull(),
 });
