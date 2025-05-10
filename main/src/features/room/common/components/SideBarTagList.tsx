@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 import type { TagGroupSchema, TagWithCountSchema } from "../schema";
 
 function SideBarTagItem({ roomId, tag }: { roomId: string; tag: TagWithCountSchema }) {

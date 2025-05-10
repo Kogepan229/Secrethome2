@@ -1,9 +1,10 @@
 "use server";
 import { db } from "@/db/db";
-import { contentTagsTable, roomsTable } from "@/db/schema";
+import { contentTagsTable, roomsTable, tagsTable } from "@/db/schema";
 import { parseWithZod } from "@conform-to/zod";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { accessRoomSchema, uploadTagsSchema } from "./schema";
 
 export async function accessRoomAction(_prev: unknown, formData: FormData) {
@@ -47,5 +48,20 @@ export async function submitContentTags(data: { id: string; tags: string[] }): P
     return false;
   }
 
+  return true;
+}
+
+export async function deleteTag(id: string) {
+  console.log("ddd");
+  const parsed = await z.string().safeParseAsync(id);
+  console.log(parsed);
+  if (!parsed.success) return false;
+
+  try {
+    await db.delete(tagsTable).where(eq(tagsTable.id, parsed.data));
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
   return true;
 }

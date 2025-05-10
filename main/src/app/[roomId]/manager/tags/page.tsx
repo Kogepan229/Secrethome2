@@ -1,8 +1,9 @@
 import { db } from "@/db/db";
-import { tagGroupsTable, tagsTable } from "@/db/schema";
+import { contentTagsTable, tagGroupsTable, tagsTable } from "@/db/schema";
 import { TagCreateForm } from "@/features/room/tag/components/TagCreateForm";
-import { eq } from "drizzle-orm";
+import { desc, eq, getTableColumns } from "drizzle-orm";
 import Link from "next/link";
+import { TagManagerTagItem } from "./TagManagerTagItem";
 
 function TagGroupItem({
   roomId,
@@ -27,20 +28,19 @@ function TagGroupItem({
   );
 }
 
-function TagItem({ name }: { name: string }) {
-  return (
-    <div>
-      <span>{name}</span>
-    </div>
-  );
-}
+async function TagList({ tagGroupId }: { tagGroupId: string }) {
+  const countQuery = db.$count(contentTagsTable, eq(contentTagsTable.tagId, tagsTable.id));
+  const tags = await db
+    .select({
+      ...getTableColumns(tagsTable),
+      count: countQuery,
+    })
+    .from(tagsTable)
+    .where(eq(tagsTable.groupId, tagGroupId))
+    .orderBy(desc(countQuery), tagsTable.name);
 
-async function TagList({ tagGroupId }: { tagGroupId: string | undefined }) {
-  if (tagGroupId === undefined) return null;
-
-  const tags = await db.select().from(tagsTable).where(eq(tagsTable.groupId, tagGroupId));
   const tagElements = tags.map((tag) => {
-    return <TagItem name={tag.name} key={tag.id} />;
+    return <TagManagerTagItem tag={tag} key={tag.id} />;
   });
 
   return <div>{tagElements}</div>;
