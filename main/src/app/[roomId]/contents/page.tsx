@@ -1,6 +1,7 @@
 import { BasicButton } from "@/components/BasicButton";
 import { ContentsList } from "@/features/room/common/components/ContentsList";
 import { PageSelector } from "@/features/room/common/components/PageSelector";
+import { SideBar } from "@/features/room/common/components/SideBar";
 import { getCurrentPageIndex } from "@/features/room/common/utils/contents";
 import type { SearchParams } from "@/utils/searchParams";
 import Link from "next/link";
@@ -28,9 +29,7 @@ export default async function RoomPage({
         </div>
       </div>
       <div className="flex">
-        <div className="w-50">
-          <div className="w-50 h-10 bg-primary text-white-primary text-center leading-10">タグ一覧</div>
-        </div>
+        <SideBar roomId={roomId} />
         <div className="grow basis-0">
           <div className="mx-[5%] mb-10">
             <Suspense>
