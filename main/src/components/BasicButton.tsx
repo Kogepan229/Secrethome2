@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { type VariantProps, tv } from "tailwind-variants";
 
 export const buttonStyle = tv({
-  base: "h-9.5 p-1.5 rounded-lg shadow cursor-pointer text-base",
+  base: "h-9 px-1.5 py-1 rounded-lg shadow cursor-pointer text-base",
   variants: {
     color: {
       white:
