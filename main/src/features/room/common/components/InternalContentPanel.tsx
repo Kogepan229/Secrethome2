@@ -19,7 +19,7 @@ function Info({
     const tags = entry[1];
     const tagElements = tags.map((tag) => {
       return (
-        <Link href={""} key={tag.id}>
+        <Link href={`/${content.roomId}/contents?tags=${tag.id}`} key={tag.id}>
           <span
             className="h-6 cursor-pointer px-1 pb-0.5 border border-border-gray rounded-md text-sm shadow leading-6 hover:bg-hover-gray"
             onClick={(e) => e.stopPropagation()}
