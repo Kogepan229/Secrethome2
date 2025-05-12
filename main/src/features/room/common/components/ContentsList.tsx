@@ -1,16 +1,31 @@
 import { db } from "@/db/db";
-import { contentsTable } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { contentTagsTable, contentsTable } from "@/db/schema";
+import { and, count, eq, getTableColumns, inArray } from "drizzle-orm";
 import { CONTENTS_NUM_PER_PAGE } from "../utils/contents";
 import { ContentPanel } from "./ContentPanel";
 
-export async function ContentsList({ roomId, page }: { roomId: string; page: number }) {
-  const contents = await db
+async function getContents(roomId: string, tagIds: string[] | undefined, page: number) {
+  if (tagIds) {
+    return db
+      .select({ ...getTableColumns(contentsTable), count: count() })
+      .from(contentTagsTable)
+      .innerJoin(contentsTable, eq(contentTagsTable.contentId, contentsTable.id))
+      .where(inArray(contentTagsTable.tagId, tagIds))
+      .groupBy(contentsTable.id)
+      .having(({ count }) => eq(count, tagIds.length))
+      .limit(CONTENTS_NUM_PER_PAGE)
+      .offset(CONTENTS_NUM_PER_PAGE * (page - 1));
+  }
+  return db
     .select()
     .from(contentsTable)
     .where(and(eq(contentsTable.roomId, roomId), eq(contentsTable.status, "available")))
     .limit(CONTENTS_NUM_PER_PAGE)
     .offset(CONTENTS_NUM_PER_PAGE * (page - 1));
+}
+
+export async function ContentsList({ roomId, tagIds, page }: { roomId: string; tagIds: string[] | undefined; page: number }) {
+  const contents = await getContents(roomId, tagIds, page);
 
   return (
     <div className="grid my-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

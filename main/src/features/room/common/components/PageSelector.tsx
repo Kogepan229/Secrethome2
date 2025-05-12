@@ -4,14 +4,17 @@ import { CONTENTS_NUM_PER_PAGE, getAvailableContentsCount } from "../utils/conte
 
 export async function PageSelector({
   roomId,
+  tagIds,
   baseURL,
   currentPageIndex,
 }: {
   roomId: string;
+  tagIds: string[] | undefined;
   baseURL: string;
   currentPageIndex: number;
 }) {
-  const count = await getAvailableContentsCount(roomId);
+  const count = await getAvailableContentsCount(roomId, tagIds);
+  console.log(count);
   const totalPageNum = count === 0 ? 1 : Math.ceil(count / CONTENTS_NUM_PER_PAGE);
 
   let pageNums = [];
