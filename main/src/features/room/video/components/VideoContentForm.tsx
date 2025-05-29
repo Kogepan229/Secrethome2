@@ -14,7 +14,7 @@ import { useProgressBar } from "@/components/form/ProgressBar";
 import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { submitContentTags } from "../../common/actions";
 import { FormTag } from "../../common/components/FormTag";
-import { type TagGroupSchema, type TagSchema, tagSchema } from "../../common/schema";
+import type { TagGroupSchema, TagSchema } from "../../common/schema";
 import { objectToFormData } from "../../common/utils/formdata";
 import { uploadThumbnail } from "../../common/utils/uploadThumbnail";
 import { deleteVideoInfo, submitVideoInfo } from "../actions";
