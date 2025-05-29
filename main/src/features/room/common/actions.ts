@@ -34,6 +34,10 @@ export async function submitContentTags(data: { id: string; tags: string[] }): P
     return false;
   }
 
+  if (result.data.tags.length === 0) {
+    return true;
+  }
+
   const tags = result.data.tags.map((tagId, i) => {
     return { contentId: result.data.id, tagId: tagId, order: i + 1 };
   });
@@ -47,7 +51,6 @@ export async function submitContentTags(data: { id: string; tags: string[] }): P
     console.error(e);
     return false;
   }
-
   return true;
 }
 
