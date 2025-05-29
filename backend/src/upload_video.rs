@@ -103,9 +103,9 @@ pub fn start_video_processing_worker(pool: Pool<Postgres>) -> VideoProcessSender
         info!("Start video processing worker");
         while let Some(id) = rx.recv().await {
             if let Err(e) = process_video(&id, &pool).await {
-                info!("{}", e);
+                info!("Failed processing video [id: {}] [error: {}]", &id, e);
             } else {
-                info!("Successful processing video id: {}", &id);
+                info!("Finished processing video [id: {}]", &id);
             }
 
             {
@@ -131,6 +131,7 @@ pub fn start_video_processing_worker(pool: Pool<Postgres>) -> VideoProcessSender
 #[sqlx(type_name = "content_status_type", rename_all = "lowercase")]
 enum ContentStatusType {
     Available,
+    Error,
 }
 
 async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
@@ -181,7 +182,7 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
     video_path.set_extension("mp4");
 
     create_dir_all(&video_dir_path).await?;
-    tokio::fs::rename(tmp_video_path, video_path).await?;
+    tokio::fs::rename(tmp_video_path, &video_path).await?;
 
     let mut playlist_path = video_dir_path.join("playlist");
     playlist_path.set_extension("m3u8");
@@ -193,9 +194,48 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
     //     .start()?
     //     .await?;
 
+    info!("Start converting video. [id: {}]", id);
+    let exit_status = tokio::process::Command::new("ffmpeg")
+        .current_dir(&video_dir_path)
+        .args(&[
+            "-i",
+            "original.mp4",
+            "-c:v",
+            "copy",
+            "-c:a",
+            "copy",
+            "-f",
+            "hls",
+            "-hls_time",
+            "5",
+            "-hls_playlist_type",
+            "vod",
+            "-hls_segment_filename",
+            "%4d.ts",
+            "playlist.m3u8",
+        ])
+        .kill_on_drop(true)
+        .spawn()?
+        .wait()
+        .await?;
+
+    if exit_status.success() {
+        info!("Finished converting video. [id: {}]", id);
+    } else {
+        error!(
+            "Failed to convert video file. [id: {}] [error_code: {:?}]",
+            id,
+            exit_status.code()
+        )
+    }
+
     sqlx::query!(
         "UPDATE contents SET status = $1 WHERE id = $2",
-        ContentStatusType::Available as _,
+        if exit_status.success() {
+            ContentStatusType::Available
+        } else {
+            ContentStatusType::Error
+        } as _,
         id
     )
     .execute(pool)
