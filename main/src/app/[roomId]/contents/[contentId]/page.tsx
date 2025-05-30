@@ -1,5 +1,6 @@
 import { db } from "@/db/db";
 import { contentsTable } from "@/db/schema";
+import { VideoPlayer } from "@/features/room/video/components/VideoPlayer";
 import { and, eq } from "drizzle-orm";
 
 export default async function ContentPage({
@@ -20,8 +21,7 @@ export default async function ContentPage({
 
   return (
     <div>
-      {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
-      <video />
+      <VideoPlayer src={`${process.env.NEXT_PUBLIC_FILES_URL}/video/${contentId}/playlist.m3u8`} />
       <div>
         <div>
           <span>{content.title}</span>
