@@ -36,13 +36,14 @@ export function VideoPlayer({ src }: { src: string }) {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
+    const volume = Number(localStorage.getItem("volume"));
+    setVolume(Number.isNaN(volume) ? 0 : volume);
     setIsMute(localStorage.getItem("mute") === "true");
 
     videoRef.current?.addEventListener("timeupdate", onVideoTimeUpdate);
     videoRef.current?.addEventListener("loadedmetadata", onVideoLoaded);
 
     return () => {
-      console.log("remove");
       videoRef.current?.removeEventListener("timeupdate", onVideoTimeUpdate);
       videoRef.current?.removeEventListener("loadedmetadata", onVideoLoaded);
     };
