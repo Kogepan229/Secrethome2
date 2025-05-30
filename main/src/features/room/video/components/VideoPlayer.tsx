@@ -1,6 +1,6 @@
 "use client";
 import Hls from "hls.js";
-import { type ChangeEvent, type MouseEventHandler, type ReactNode, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type MouseEventHandler, type ReactNode, memo, useEffect, useRef, useState } from "react";
 
 function ControlButton({
   children,
@@ -15,6 +15,39 @@ function ControlButton({
     </button>
   );
 }
+
+const TimeDisplay = memo(function TimeDisplay({ currentTime, maxTime }: { currentTime: number; maxTime: number }) {
+  let diaplayTime = "";
+  if (Number.isNaN(currentTime) || Number.isNaN(maxTime)) {
+    diaplayTime = "00:00 / 00:00";
+  } else {
+    let nowS = Math.round(currentTime);
+    let nowM = Math.floor(nowS / 60);
+    nowS %= 60;
+    const nowH = Math.floor(nowM / 60);
+    nowM %= 60;
+
+    let maxS = Math.round(maxTime);
+    let maxM = Math.floor(maxS / 60);
+    maxS %= 60;
+    const maxH = Math.floor(maxM / 60);
+    maxM %= 60;
+
+    diaplayTime += nowH ? `${nowH}:` : "";
+    diaplayTime += `${(`00${nowM}`).slice(-2)}:`;
+    diaplayTime += `00${nowS}`.slice(-2);
+    diaplayTime += " / ";
+    diaplayTime += maxH ? `${maxH}:` : "";
+    diaplayTime += `${(`00${maxM}`).slice(-2)}:`;
+    diaplayTime += `00${maxS}`.slice(-2);
+  }
+
+  return (
+    <div className="h-12 leading-12 px-[5px] text-sm text-white">
+      <span>{diaplayTime}</span>
+    </div>
+  );
+});
 
 export function VideoPlayer({ src }: { src: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -206,6 +239,7 @@ export function VideoPlayer({ src }: { src: string }) {
                 <div className="absolute h-[3px] top-[22px] bg-white" style={{ width: `${isMute ? 0 : volume}%` }} />
               </div>
             </div>
+            <TimeDisplay currentTime={videoCurrentTime} maxTime={videoMaxTime} />
           </div>
           <div className="flex float-right">
             <ControlButton onClick={onClickFullScreen}>
