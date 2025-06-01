@@ -72,14 +72,6 @@ export function VideoPlayer({ src }: { src: string }) {
     const volume = Number(localStorage.getItem("volume"));
     setVolume(Number.isNaN(volume) ? 0 : volume);
     setIsMute(localStorage.getItem("mute") === "true");
-
-    videoRef.current?.addEventListener("timeupdate", onVideoTimeUpdate);
-    videoRef.current?.addEventListener("loadedmetadata", onVideoLoaded);
-
-    return () => {
-      videoRef.current?.removeEventListener("timeupdate", onVideoTimeUpdate);
-      videoRef.current?.removeEventListener("loadedmetadata", onVideoLoaded);
-    };
   }, []);
 
   useEffect(() => {
@@ -184,7 +176,7 @@ export function VideoPlayer({ src }: { src: string }) {
   return (
     <div ref={containerRef} className="w-[60%] relative z-10">
       {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
-      <video ref={videoRef} className="w-full h-full" />
+      <video ref={videoRef} className="w-full h-full" onTimeUpdate={onVideoTimeUpdate} onLoadedMetadata={onVideoLoaded} />
       <div className="flex flex-col absolute w-full h-full top-0 left-0">
         <div className="grow" onClick={onClickPlayStop} />
         <div className="w-[calc(100%-24px)] h-4 mx-3 absolute bottom-12 hover:[&>div]:block hover:[&>div]:h-[5px] hover:[&>div]:bottom-[-1px] hover:cursor-pointer">
