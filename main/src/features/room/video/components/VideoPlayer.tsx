@@ -72,6 +72,11 @@ export function VideoPlayer({ src }: { src: string }) {
     const volume = Number(localStorage.getItem("volume"));
     setVolume(Number.isNaN(volume) ? 0 : volume);
     setIsMute(localStorage.getItem("mute") === "true");
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   useEffect(() => {
@@ -151,6 +156,16 @@ export function VideoPlayer({ src }: { src: string }) {
       videoRef.current!.currentTime += 5;
     }
     onVideoTimeUpdate();
+  }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key === " ") {
+      onClickPlayStop();
+    } else if (e.key === "ArrowRight" || e.key === "l") {
+      onClickForward();
+    } else if (e.key === "ArrowLeft" || e.key === "j") {
+      onClickBack();
+    }
   }
 
   function onClickMute() {
