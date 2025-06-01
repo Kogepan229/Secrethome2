@@ -279,8 +279,11 @@ export function VideoPlayer({ src }: { src: string }) {
                     onChange={onChangeVolume}
                     className="w-12 h-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
                   />
-                  <div className="absolute w-full h-[3px] top-[22px] bg-white/20" />
-                  <div className="absolute h-[3px] top-[22px] bg-white" style={{ width: `${isMute ? 0 : volume}%` }} />
+                  <div className="absolute w-full h-[3px] top-[22px] bg-white/20 pointer-events-none select-none" />
+                  <div
+                    className="absolute h-[3px] top-[22px] bg-white pointer-events-none select-none"
+                    style={{ width: `${isMute ? 0 : volume}%` }}
+                  />
                 </div>
               </div>
               <TimeDisplay currentTime={videoCurrentTime} maxTime={videoMaxTime} />
