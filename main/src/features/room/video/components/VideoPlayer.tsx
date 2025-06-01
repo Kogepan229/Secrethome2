@@ -221,7 +221,7 @@ export function VideoPlayer({ src }: { src: string }) {
   const showController = !isPlaying || isCursorOnVideo || isCursorOnController;
 
   return (
-    <div ref={containerRef} className="w-[60%] relative z-10">
+    <div ref={containerRef} className="w-full relative z-10">
       {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
       <video ref={videoRef} className="w-full h-full" onTimeUpdate={onVideoTimeUpdate} onLoadedMetadata={onVideoLoaded} />
       <div

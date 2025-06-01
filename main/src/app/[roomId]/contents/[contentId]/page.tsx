@@ -20,7 +20,7 @@ export default async function ContentPage({
   }
 
   return (
-    <div>
+    <div className="w-[90%] max-w-220 m-auto">
       <VideoPlayer src={`${process.env.NEXT_PUBLIC_FILES_URL}/video/${contentId}/playlist.m3u8`} />
       <div>
         <div>
