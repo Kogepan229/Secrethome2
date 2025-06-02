@@ -6,9 +6,20 @@ jobs:
   build-frontend:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: main
+    services:
+      db:
+        image: postgres
+        ports:
+          - 60232:5432
+        env:
+          POSTGRES_NAME: secrethome
+          POSTGRES_USER: secrethome
+          POSTGRES_PASSWORD: secrethome
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout
@@ -26,5 +37,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build frontend
+        working-directory: main
         run: pnpm run build
+
+      - name: Push database
+        working-directory: main
+        run: pnpm drizzle-kit push
+
+      - name: Setup rust-toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check backend
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://secrethome:secrethome@127.0.0.1:60232/secrethome
+        run: cargo check
