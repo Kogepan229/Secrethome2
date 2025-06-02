@@ -1,15 +1,23 @@
 "use client";
 import Hls from "hls.js";
-import { type ChangeEvent, type MouseEventHandler, type ReactNode, memo, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type MouseEventHandler, type ReactNode, type RefObject, memo, useEffect, useRef, useState } from "react";
 
 function ControlButton({
   children,
   onClick,
-  small = false,
-}: { children: ReactNode; onClick: MouseEventHandler<HTMLButtonElement>; small?: boolean }) {
+  small,
+  disabled,
+}: { children: ReactNode; onClick: MouseEventHandler<HTMLButtonElement>; small?: boolean; disabled?: boolean }) {
   return (
-    <button type="button" onClick={onClick} className={`${small ? "p-2.5" : "p-1.5"} w-12 h-12 cursor-pointer`}>
-      <svg role="graphics-symbol" width="24" height="24" viewBox="0 0 24 24" fill="white" className={`${small ? "w-7 h-7" : "w-9 h-9"}`}>
+    <button type="button" onClick={onClick} className={`${small ? "p-2.5" : "p-1.5"} w-12 h-12 cursor-pointer`} disabled={disabled}>
+      <svg
+        role="graphics-symbol"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill={disabled ? "gray" : "white"}
+        className={`${small ? "w-7 h-7" : "w-9 h-9"}`}
+      >
         {children}
       </svg>
     </button>
@@ -49,21 +57,33 @@ const TimeDisplay = memo(function TimeDisplay({ currentTime, maxTime }: { curren
   );
 });
 
-export function VideoPlayer({ src }: { src: string }) {
+type Props = {
+  src?: string;
+  videoRef?: RefObject<HTMLVideoElement | null>;
+};
+
+export function VideoPlayer(props: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  if (props.videoRef) {
+    props.videoRef.current = videoRef.current;
+  }
 
   useEffect(() => {
-    if (Hls.isSupported() && videoRef.current) {
+    if (!props.src || !videoRef.current) return;
+    if (Hls.isSupported()) {
       const hls = new Hls();
-      hls.loadSource(src);
+      hls.loadSource(props.src);
       hls.attachMedia(videoRef.current);
+    } else {
+      videoRef.current.setAttribute("src", props.src);
     }
-  }, [src]);
+  }, [props.src]);
 
+  const [canPlay, setCanPlay] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [videoCurrentTime, setVideoCurrentTime] = useState(0);
   const [videoMaxTime, setVideoMaxTime] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(100);
   const [isMute, setIsMute] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -91,17 +111,22 @@ export function VideoPlayer({ src }: { src: string }) {
     }
   }, [volume, isMute]);
 
-  function onVideoLoaded() {
+  function onLoadedMetadata() {
     if (!Number.isNaN(videoRef.current?.duration) && videoRef.current?.duration) {
       setVideoMaxTime(Math.round(videoRef.current?.duration));
     }
-    onVideoTimeUpdate();
+    onTimeUpdate();
   }
 
-  function onVideoTimeUpdate() {
+  function onTimeUpdate() {
     if (videoRef.current?.currentTime !== undefined) {
       setVideoCurrentTime(videoRef.current?.currentTime);
     }
+  }
+
+  function onEmptied() {
+    setIsPlaying(false);
+    setCanPlay(false);
   }
 
   function onChangeSeekbar(e: ChangeEvent<HTMLInputElement>) {
@@ -149,7 +174,7 @@ export function VideoPlayer({ src }: { src: string }) {
     } else {
       videoRef.current!.currentTime -= 5;
     }
-    onVideoTimeUpdate();
+    onTimeUpdate();
   }
 
   function onClickForward() {
@@ -159,7 +184,7 @@ export function VideoPlayer({ src }: { src: string }) {
     } else {
       videoRef.current!.currentTime += 5;
     }
-    onVideoTimeUpdate();
+    onTimeUpdate();
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -223,14 +248,26 @@ export function VideoPlayer({ src }: { src: string }) {
   return (
     <div ref={containerRef} className="w-full relative z-10">
       {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
-      <video ref={videoRef} className="w-full h-full" onTimeUpdate={onVideoTimeUpdate} onLoadedMetadata={onVideoLoaded} />
+      <video
+        ref={videoRef}
+        className="w-full h-full bg-zinc-900 aspect-video [&[src]]:aspect-auto"
+        onLoadedMetadata={onLoadedMetadata}
+        onTimeUpdate={onTimeUpdate}
+        onEnded={() => setIsPlaying(false)}
+        onCanPlay={() => setCanPlay(true)}
+        onEmptied={onEmptied}
+      />
       <div
         onMouseMove={onVideoMouseMove}
         onMouseLeave={onVideoMouseLeave}
         className={`flex flex-col absolute w-full h-full top-0 left-0 ${showController ? "" : "cursor-none"}`}
       >
         <div className="grow" onClick={onClickPlayStop} />
-        <div onMouseMove={onControlMouseMove} onMouseLeave={onControlMouseLeave} className={`${showController ? "" : "hidden"} h-16`}>
+        <div
+          onMouseMove={onControlMouseMove}
+          onMouseLeave={onControlMouseLeave}
+          className={`${showController ? "" : "hidden"} h-16 bg-gradient-to-b from-transparent via-black/20 to-black/50 `}
+        >
           <div className="w-[calc(100%-24px)] h-4 mx-3 absolute bottom-12 hover:[&>div]:block hover:[&>div]:h-[5px] hover:[&>div]:bottom-[-1px] hover:cursor-pointer">
             <input
               type="range"
@@ -252,9 +289,9 @@ export function VideoPlayer({ src }: { src: string }) {
               <div className="w-[13px] h-[13px] absolute -right-1.5 -bottom-[5px] rounded-full bg-red-500 pointer-events-none select-none" />
             </div>
           </div>
-          <div className="w-full h-12 absolute bottom-0 bg-black/5">
+          <div className="w-full h-12 absolute bottom-0">
             <div className="flex flex-1 float-left">
-              <ControlButton onClick={onClickPlayStop}>
+              <ControlButton onClick={onClickPlayStop} disabled={!canPlay}>
                 {isPlaying ? <path d="M14,19H18V5H14M6,19H10V5H6V19Z" /> : <path d="M8 5v14l11-7z" />}
               </ControlButton>
               <ControlButton onClick={onClickBack} small>
