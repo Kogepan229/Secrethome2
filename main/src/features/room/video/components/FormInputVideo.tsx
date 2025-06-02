@@ -5,6 +5,7 @@ import { type ChangeEvent, useRef, useState } from "react";
 import { BasicButton } from "@/components/BasicButton";
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
 import { formStyles } from "@/components/form/formStyles";
+import { VideoPlayer } from "./VideoPlayer";
 
 export function FormInputVideo({ videoField, thumbnailField }: { videoField: FieldMetadata; thumbnailField: FieldMetadata }) {
   const [thumbnailSrc, setThumbnailSrc] = useState<string | undefined>(undefined);
@@ -14,13 +15,10 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
   function handleOnChangeVideo(e: ChangeEvent<HTMLInputElement>) {
     if (!videoRef.current) return;
 
-    if (e.target.files === undefined || e.target.files?.length !== 1) {
-      videoRef.current.removeAttribute("src");
-    } else {
+    if (e.target.files !== undefined && e.target.files?.length === 1) {
       videoRef.current.setAttribute("src", URL.createObjectURL(e.target.files[0]));
+      videoRef.current.load();
     }
-
-    videoRef.current.load();
   }
 
   function handleOnChangeThumbnail(e: ChangeEvent<HTMLInputElement>) {
@@ -63,8 +61,9 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
           onChange={handleOnChangeVideo}
         />
         <ErrorMessage message={videoField.errors} />
-        {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
-        <video controls playsInline ref={videoRef} className="w-full mt-1" />
+        <div className="mt-1">
+          <VideoPlayer videoRef={videoRef} />
+        </div>
       </div>
       <div className={formStyles.wrapper()}>
         <span className={formStyles.label()}>サムネイル</span>
