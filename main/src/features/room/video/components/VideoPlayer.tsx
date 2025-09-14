@@ -1,6 +1,16 @@
 "use client";
 import Hls from "hls.js";
-import { type ChangeEvent, type MouseEventHandler, memo, type ReactNode, type RefObject, useEffect, useRef, useState } from "react";
+import {
+  type ChangeEvent,
+  type MouseEventHandler,
+  memo,
+  type ReactNode,
+  type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 function ControlButton({
   children,
@@ -97,25 +107,6 @@ export function VideoPlayer(props: Props) {
 
   const moveTimer = useRef<number>(null);
 
-  useEffect(() => {
-    const volume = Number(localStorage.getItem("volume"));
-    setVolume(Number.isNaN(volume) ? 0 : volume);
-    setIsMute(localStorage.getItem("mute") === "true");
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isMute) {
-      videoRef.current!.volume = 0;
-    } else {
-      videoRef.current!.volume = volume / 100;
-    }
-  }, [volume, isMute]);
-
   function onLoadedMetadata() {
     if (!Number.isNaN(videoRef.current?.duration) && videoRef.current?.duration) {
       setVideoMaxTime(Math.round(videoRef.current?.duration));
@@ -123,11 +114,11 @@ export function VideoPlayer(props: Props) {
     onTimeUpdate();
   }
 
-  function onTimeUpdate() {
+  const onTimeUpdate = useCallback(() => {
     if (videoRef.current?.currentTime !== undefined) {
       setVideoCurrentTime(videoRef.current?.currentTime);
     }
-  }
+  }, []);
 
   function onEmptied() {
     setIsPlaying(false);
@@ -162,7 +153,7 @@ export function VideoPlayer(props: Props) {
     }
   }
 
-  function onClickPlayStop() {
+  const onClickPlayStop = useCallback(() => {
     setIsPlaying((playing) => {
       if (playing) {
         videoRef.current?.pause();
@@ -171,44 +162,35 @@ export function VideoPlayer(props: Props) {
       }
       return !playing;
     });
-  }
+  }, []);
 
-  function onClickBack() {
+  const onClickBack = useCallback(() => {
     if (videoRef.current!.currentTime - 5 < 0) {
       videoRef.current!.currentTime = 0;
     } else {
       videoRef.current!.currentTime -= 5;
     }
     onTimeUpdate();
-  }
+  }, [onTimeUpdate]);
 
-  function onClickForward() {
+  const onClickForward = useCallback(() => {
     if (!videoRef.current?.duration) return;
-    if (videoRef.current!.currentTime + 5 > videoRef.current?.duration) {
-      videoRef.current!.currentTime = videoRef.current?.duration;
+
+    if (videoRef.current.currentTime + 5 > videoRef.current.duration) {
+      videoRef.current.currentTime = videoRef.current.duration;
     } else {
-      videoRef.current!.currentTime += 5;
+      videoRef.current.currentTime += 5;
     }
     onTimeUpdate();
-  }
+  }, [onTimeUpdate]);
 
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === " ") {
-      onClickPlayStop();
-    } else if (e.key === "ArrowRight" || e.key === "l") {
-      onClickForward();
-    } else if (e.key === "ArrowLeft" || e.key === "j") {
-      onClickBack();
-    }
-  }
-
-  function onClickMute() {
+  const onClickMute = useCallback(() => {
     if (volume === 0) return;
     setIsMute((mute) => {
       localStorage.setItem("mute", String(!mute));
       return !mute;
     });
-  }
+  }, [volume]);
 
   function onClickFullScreen() {
     if (isFullScreen) {
@@ -248,11 +230,42 @@ export function VideoPlayer(props: Props) {
     setIsCursorOnController(false);
   }
 
+  const onKeyDown = useCallback(
+    () => (e: KeyboardEvent) => {
+      if (e.key === " ") {
+        onClickPlayStop();
+      } else if (e.key === "ArrowRight" || e.key === "l") {
+        onClickForward();
+      } else if (e.key === "ArrowLeft" || e.key === "j") {
+        onClickBack();
+      }
+    },
+    [onClickBack, onClickForward, onClickPlayStop],
+  );
+
+  useEffect(() => {
+    const volume = Number(localStorage.getItem("volume"));
+    setVolume(Number.isNaN(volume) ? 0 : volume);
+    setIsMute(localStorage.getItem("mute") === "true");
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown]);
+
+  useEffect(() => {
+    if (isMute) {
+      videoRef.current!.volume = 0;
+    } else {
+      videoRef.current!.volume = volume / 100;
+    }
+  }, [volume, isMute]);
+
   const showController = !isPlaying || isCursorOnVideo || isCursorOnController;
 
   return (
     <div ref={containerRef} className="w-full relative z-10">
-      {/* biome-ignore lint/a11y/useMediaCaption: <explanation> */}
       <video
         ref={videoRef}
         className="w-full h-full bg-zinc-900 aspect-video [&[src]]:aspect-auto"
