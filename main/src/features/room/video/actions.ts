@@ -1,6 +1,6 @@
 "use server";
 import type { SubmissionResult } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { eq } from "drizzle-orm";
 import { db } from "@/db/db";
 import { contentsTable } from "@/db/schema";

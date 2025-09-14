@@ -1,4 +1,4 @@
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { after, type NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/db";
 import { contentsTable } from "@/db/schema";

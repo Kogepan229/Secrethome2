@@ -1,6 +1,6 @@
 "use client";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { createId } from "@paralleldrive/cuid2";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";

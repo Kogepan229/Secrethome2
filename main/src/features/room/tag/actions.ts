@@ -1,6 +1,6 @@
 "use server";
 import type { SubmissionResult } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { DatabaseError } from "pg";
 import { db } from "@/db/db";
 import { tagGroupsTable, tagsTable } from "@/db/schema";

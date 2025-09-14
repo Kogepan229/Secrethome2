@@ -1,6 +1,6 @@
 "use client";
 import { getFormProps, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState } from "react";
 
 import { FormHeader } from "@/components/FormHeader";

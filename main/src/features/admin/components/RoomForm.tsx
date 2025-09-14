@@ -1,6 +1,6 @@
 "use client";
 import { getFormProps, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState } from "react";
 import { Form } from "@/components/form/Form";
 import { FormBottom } from "@/components/form/FormBottom";
