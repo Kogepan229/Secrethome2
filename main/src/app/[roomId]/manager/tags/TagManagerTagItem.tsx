@@ -1,9 +1,9 @@
 "use client";
+import { useState } from "react";
 import TrashIcon from "@/assets/button/trash.svg";
 import { BasicButton } from "@/components/BasicButton";
 import { deleteTag } from "@/features/room/common/actions";
 import type { TagWithCountSchema } from "@/features/room/common/schema";
-import { useState } from "react";
 
 export function TagManagerTagItem({ tag }: { tag: TagWithCountSchema }) {
   const [deleted, setDeleted] = useState(false);

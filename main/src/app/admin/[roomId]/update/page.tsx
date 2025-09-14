@@ -1,13 +1,9 @@
+import { eq } from "drizzle-orm";
 import { db } from "@/db/db";
 import { roomsTable } from "@/db/schema";
 import { RoomForm } from "@/features/admin/components/RoomForm";
-import { eq } from "drizzle-orm";
 
-export default async function UpdateRoomPage({
-  params,
-}: {
-  params: Promise<{ roomId: string }>;
-}) {
+export default async function UpdateRoomPage({ params }: { params: Promise<{ roomId: string }> }) {
   const roomData = await db
     .select()
     .from(roomsTable)

@@ -1,7 +1,7 @@
-import { db } from "@/db/db";
-import { tagGroupsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { db } from "@/db/db";
+import { tagGroupsTable } from "@/db/schema";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ roomId: string }> }) {
   const { roomId } = await params;

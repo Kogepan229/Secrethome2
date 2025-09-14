@@ -1,9 +1,8 @@
 import { loadEnvConfig } from "@next/env";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-
-import { adminTable } from "./schema";
 import * as schema from "./schema";
+import { adminTable } from "./schema";
 
 loadEnvConfig(process.cwd(), true);
 

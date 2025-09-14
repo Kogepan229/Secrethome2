@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { BasicButton } from "@/components/BasicButton";
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
 import { RoomList } from "@/features/admin/components/RoomList";
-import Link from "next/link";
 
 export default function AdminPage() {
   return (

@@ -1,7 +1,7 @@
+import { eq } from "drizzle-orm";
 import { RoomHeader } from "@/components/RoomHeader";
 import { db } from "@/db/db";
 import { roomsTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export default async function RootLayout({
   children,

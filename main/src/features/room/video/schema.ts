@@ -1,6 +1,6 @@
-import { contentsTable } from "@/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { contentsTable } from "@/db/schema";
 
 export const uploadVideoContentInfoSchema = createInsertSchema(contentsTable, {
   title: (schema) => schema.trim().min(1, "1文字以上必要です"),

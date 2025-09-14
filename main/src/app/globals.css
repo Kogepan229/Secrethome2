@@ -13,7 +13,7 @@
 }
 
 :root {
-  --h-header: 48px
+  --h-header: 48px;
 }
 
 @utility h-header {
@@ -24,7 +24,7 @@
   background-color: #0192a8;
 }
 @utility bg-hover-primary {
-  background-color: #1ca1b6
+  background-color: #1ca1b6;
 }
 @utility bg-light-primary {
   background-color: #4dbdce;
@@ -36,17 +36,17 @@
   background-color: #dbdbdb;
 }
 @utility text-black-primary {
-  color: #404040
+  color: #404040;
 }
 @utility text-white-primary {
   color: #f0f0f0;
 }
 @utility text-primary {
-  color: #1ca1b6
+  color: #1ca1b6;
 }
 @utility text-disabled-gray {
   color: #555055;
 }
 @utility text-error {
-  color: #f54c36
+  color: #f54c36;
 }

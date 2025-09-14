@@ -1,6 +1,6 @@
-import { tagGroupsTable, tagsTable } from "@/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
+import { tagGroupsTable, tagsTable } from "@/db/schema";
 
 export const createTagGroupSchema = createInsertSchema(tagGroupsTable).omit({ id: true, createdAt: true, order: true });
 

@@ -1,6 +1,6 @@
-import { db } from "@/db/db";
-import { contentTagsTable, contentsTable } from "@/db/schema";
 import { and, count, eq, getTableColumns, inArray } from "drizzle-orm";
+import { db } from "@/db/db";
+import { contentsTable, contentTagsTable } from "@/db/schema";
 import { CONTENTS_NUM_PER_PAGE } from "../utils/contents";
 import { ContentPanel } from "./ContentPanel";
 

@@ -1,3 +1,5 @@
+import { inArray } from "drizzle-orm";
+import { Suspense } from "react";
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
 import { db } from "@/db/db";
 import { tagsTable } from "@/db/schema";
@@ -5,8 +7,6 @@ import { ContentsList } from "@/features/room/common/components/ContentsList";
 import { PageSelector } from "@/features/room/common/components/PageSelector";
 import { getCurrentPageIndex, getSpecifiedTags } from "@/features/room/common/utils/contents";
 import type { SearchParams } from "@/utils/searchParams";
-import { inArray } from "drizzle-orm";
-import { Suspense } from "react";
 
 async function ListHeader({ tagIds }: { tagIds: string[] }) {
   const tagNames = (await db.select({ name: tagsTable.name }).from(tagsTable).where(inArray(tagsTable.id, tagIds))).map((tag) => tag.name);

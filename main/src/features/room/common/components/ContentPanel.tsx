@@ -1,6 +1,6 @@
+import { eq, getTableColumns } from "drizzle-orm";
 import { db } from "@/db/db";
 import { contentTagsTable, tagsTable } from "@/db/schema";
-import { eq, getTableColumns } from "drizzle-orm";
 import type { ContentSchema, TagSchema } from "../schema";
 import { InternalContentPanel } from "./InternalContentPanel";
 

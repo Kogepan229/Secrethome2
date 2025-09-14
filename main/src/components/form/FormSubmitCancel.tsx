@@ -7,7 +7,13 @@ export function FormSubmitCalcel({
   submitText,
   dirty,
   disabled,
-}: { cancelText: string; hrefCancel: string; submitText: string; dirty: boolean; disabled?: boolean }) {
+}: {
+  cancelText: string;
+  hrefCancel: string;
+  submitText: string;
+  dirty: boolean;
+  disabled?: boolean;
+}) {
   function handleClickCancel(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (dirty) {
       const confirmed = confirm("このページから移動しますか？入力内容は破棄されます。");

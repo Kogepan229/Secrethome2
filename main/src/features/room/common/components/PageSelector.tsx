@@ -1,5 +1,5 @@
-import { BasicButton } from "@/components/BasicButton";
 import Link from "next/link";
+import { BasicButton } from "@/components/BasicButton";
 import { CONTENTS_NUM_PER_PAGE, getAvailableContentsCount } from "../utils/contents";
 
 export async function PageSelector({

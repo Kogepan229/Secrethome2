@@ -1,8 +1,8 @@
+import { desc, eq, getTableColumns } from "drizzle-orm";
+import Link from "next/link";
 import { db } from "@/db/db";
 import { contentTagsTable, tagGroupsTable, tagsTable } from "@/db/schema";
 import { TagCreateForm } from "@/features/room/tag/components/TagCreateForm";
-import { desc, eq, getTableColumns } from "drizzle-orm";
-import Link from "next/link";
 import { CreateTagGroupPageButton } from "./CreateTagGroupPageButton";
 import { TagManagerTagItem } from "./TagManagerTagItem";
 
@@ -12,7 +12,13 @@ function TagGroupItem({
   name,
   description,
   selected,
-}: { roomId: string; id: string; name: string; description: string | null; selected: boolean }) {
+}: {
+  roomId: string;
+  id: string;
+  name: string;
+  description: string | null;
+  selected: boolean;
+}) {
   return (
     <div
       className="hover:bg-hover-gray active:bg-active-gray [div+&]:border-t [div+&]:border-t-border-light-gray data-[selected=true]:bg-active-gray"
@@ -69,7 +75,10 @@ async function TagGroupInfo({ tagGroupId }: { tagGroupId: string | undefined }) 
 export default async function TagsManagerPage({
   params,
   searchParams,
-}: { params: Promise<{ roomId: string }>; searchParams: Promise<{ id?: string }> }) {
+}: {
+  params: Promise<{ roomId: string }>;
+  searchParams: Promise<{ id?: string }>;
+}) {
   const { roomId } = await params;
   const { id } = await searchParams;
 

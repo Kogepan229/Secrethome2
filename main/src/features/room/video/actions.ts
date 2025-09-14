@@ -1,9 +1,9 @@
 "use server";
-import { db } from "@/db/db";
-import { contentsTable } from "@/db/schema";
 import type { SubmissionResult } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { eq } from "drizzle-orm";
+import { db } from "@/db/db";
+import { contentsTable } from "@/db/schema";
 import { uploadVideoContentInfoSchema } from "./schema";
 
 export async function submitVideoInfo(formData: FormData): Promise<{ submission: SubmissionResult<string[]>; id: string | null }> {

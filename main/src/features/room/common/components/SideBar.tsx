@@ -1,6 +1,6 @@
+import { desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import { db } from "@/db/db";
 import { contentTagsTable, tagGroupsTable, tagsTable } from "@/db/schema";
-import { desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import { SideBarTagList } from "./SideBarTagList";
 
 export async function SideBar({ roomId }: { roomId: string }) {

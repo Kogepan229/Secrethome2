@@ -19,7 +19,11 @@ function TagList({
   groupId,
   selectedTagList,
   selectCallback,
-}: { groupId: string | undefined; selectedTagList: TagSchema[]; selectCallback: Dispatch<SetStateAction<TagSchema[]>> }) {
+}: {
+  groupId: string | undefined;
+  selectedTagList: TagSchema[];
+  selectCallback: Dispatch<SetStateAction<TagSchema[]>>;
+}) {
   const { data, error, isLoading } = useSWR(`/api/tag/${groupId}`, (url) => ky.get(url).then((res) => res.json<TagSchema[]>()), {
     revalidateOnFocus: false,
   });

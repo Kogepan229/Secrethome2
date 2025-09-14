@@ -1,5 +1,5 @@
-import { getThumbnailReadStream, getThumbnailStat } from "@/features/room/common/utils/file";
 import { type NextRequest, NextResponse } from "next/server";
+import { getThumbnailReadStream, getThumbnailStat } from "@/features/room/common/utils/file";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ thumbnail_id: string }> }) {
   try {

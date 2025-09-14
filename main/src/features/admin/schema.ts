@@ -1,6 +1,6 @@
-import { roomsTable } from "@/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { roomsTable } from "@/db/schema";
 
 export const createRoomSchema = createInsertSchema(roomsTable, {
   name: (schema) => schema.trim().min(1, "1文字以上必要です"),

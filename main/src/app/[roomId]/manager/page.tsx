@@ -1,21 +1,17 @@
-import { ContentsGridHeader } from "@/components/ContentsGridHeader";
 import Link from "next/link";
+import { ContentsGridHeader } from "@/components/ContentsGridHeader";
 
-export default async function ManagerPage({
-  params,
-}: {
-  params: Promise<{ roomId: string }>;
-}) {
-  const LinkItem = ({ url, text }: { url: string; text: string }) => {
-    return (
-      <div className="[div+&]:border-t [div+&]:border-t-border-gray">
-        <Link href={url}>
-          <div className="pl-5 leading-12">{text}</div>
-        </Link>
-      </div>
-    );
-  };
+const LinkItem = ({ url, text }: { url: string; text: string }) => {
+  return (
+    <div className="[div+&]:border-t [div+&]:border-t-border-gray">
+      <Link href={url}>
+        <div className="pl-5 leading-12">{text}</div>
+      </Link>
+    </div>
+  );
+};
 
+export default async function ManagerPage({ params }: { params: Promise<{ roomId: string }> }) {
   const { roomId } = await params;
 
   return (

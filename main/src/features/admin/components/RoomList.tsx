@@ -1,8 +1,8 @@
 "use server";
-import { db } from "@/db/db";
-import { roomsTable } from "@/db/schema";
 import Link from "next/link";
 import { connection } from "next/server";
+import { db } from "@/db/db";
+import { roomsTable } from "@/db/schema";
 
 export async function RoomList() {
   await connection();

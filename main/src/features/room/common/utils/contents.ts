@@ -1,8 +1,8 @@
-import { db } from "@/db/db";
-import { contentTagsTable, contentsTable } from "@/db/schema";
-import type { SearchParams } from "@/utils/searchParams";
 import { and, count, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
+import { db } from "@/db/db";
+import { contentsTable, contentTagsTable } from "@/db/schema";
+import type { SearchParams } from "@/utils/searchParams";
 
 export const CONTENTS_NUM_PER_PAGE = 20;
 

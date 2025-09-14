@@ -1,6 +1,6 @@
-import { fileApi } from "@/utils/api";
 import { createSHA256 } from "hash-wasm";
 import type { ResponsePromise } from "ky";
+import { fileApi } from "@/utils/api";
 
 const CHUNK_SIZE = 1024 * 1024 * 2;
 const POOL_SIZE = 5;

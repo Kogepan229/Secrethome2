@@ -1,13 +1,18 @@
 "use client";
 import Hls from "hls.js";
-import { type ChangeEvent, type MouseEventHandler, type ReactNode, type RefObject, memo, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, type MouseEventHandler, memo, type ReactNode, type RefObject, useEffect, useRef, useState } from "react";
 
 function ControlButton({
   children,
   onClick,
   small,
   disabled,
-}: { children: ReactNode; onClick: MouseEventHandler<HTMLButtonElement>; small?: boolean; disabled?: boolean }) {
+}: {
+  children: ReactNode;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+  small?: boolean;
+  disabled?: boolean;
+}) {
   return (
     <button type="button" onClick={onClick} className={`${small ? "p-2.5" : "p-1.5"} w-12 h-12 cursor-pointer`} disabled={disabled}>
       <svg

@@ -1,9 +1,9 @@
 "use server";
-import { db } from "@/db/db";
-import { tagGroupsTable, tagsTable } from "@/db/schema";
 import type { SubmissionResult } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { DatabaseError } from "pg";
+import { db } from "@/db/db";
+import { tagGroupsTable, tagsTable } from "@/db/schema";
 import { createTagGroupSchema, createTagSchema, updateTagGroupSchema } from "./schema";
 
 export async function createTagGroupAction(_prev: unknown, formData: FormData): Promise<SubmissionResult<string[]>> {

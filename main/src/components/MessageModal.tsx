@@ -8,7 +8,12 @@ export function MessageModal({
   message,
   closeText,
   onClose,
-}: { open: boolean; message: string; closeText: string; onClose: string | MouseEventHandler<HTMLButtonElement> }) {
+}: {
+  open: boolean;
+  message: string;
+  closeText: string;
+  onClose: string | MouseEventHandler<HTMLButtonElement>;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {

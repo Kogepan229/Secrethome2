@@ -1,6 +1,6 @@
-import { contentsTable, roomsTable, tagGroupsTable, tagsTable } from "@/db/schema";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { contentsTable, roomsTable, tagGroupsTable, tagsTable } from "@/db/schema";
 
 export const accessRoomSchema = createSelectSchema(roomsTable).pick({ accessKey: true });
 

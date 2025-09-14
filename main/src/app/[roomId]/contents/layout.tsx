@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { BasicButton } from "@/components/BasicButton";
 import { SideBar } from "@/features/room/common/components/SideBar";
-import Link from "next/link";
 
 export default async function RootLayout({
   children,

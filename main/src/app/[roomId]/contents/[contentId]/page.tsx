@@ -1,14 +1,10 @@
+import { and, eq } from "drizzle-orm";
+import Linkify from "linkify-react";
 import { db } from "@/db/db";
 import { contentsTable } from "@/db/schema";
 import { VideoPlayer } from "@/features/room/video/components/VideoPlayer";
-import { and, eq } from "drizzle-orm";
-import Linkify from "linkify-react";
 
-export default async function ContentPage({
-  params,
-}: {
-  params: Promise<{ roomId: string; contentId: string }>;
-}) {
+export default async function ContentPage({ params }: { params: Promise<{ roomId: string; contentId: string }> }) {
   const { contentId } = await params;
   const content = (
     await db

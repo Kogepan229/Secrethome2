@@ -1,7 +1,7 @@
-import type { CustomDescriptionCategory } from "@/features/admin/types";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
 import { jsonb, pgEnum, pgTable, primaryKey, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
+import type { CustomDescriptionCategory } from "@/features/admin/types";
 
 export const adminTable = pgTable("admin", {
   password: text("password").notNull(),

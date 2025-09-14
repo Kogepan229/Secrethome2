@@ -1,6 +1,6 @@
+import { type Dispatch, type SetStateAction, use, useState } from "react";
 import { BasicButton } from "@/components/BasicButton";
 import { formStyles } from "@/components/form/formStyles";
-import { type Dispatch, type SetStateAction, use, useState } from "react";
 import type { TagGroupSchema, TagSchema } from "../schema";
 import { TagModal } from "./TagModal";
 
