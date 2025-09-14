@@ -13,11 +13,19 @@ export const uploadVideoContentInfoSchema = createInsertSchema(contentsTable, {
 
 export const uploadVideoContentSchema = uploadVideoContentInfoSchema.extend({
   video: z
-    .instanceof(File, { message: "ファイルを選択してください" })
-    .refine((file) => file.type.startsWith("video/"), { message: "動画ファイルではありません" }),
+    .instanceof(File, {
+        error: "ファイルを選択してください"
+    })
+    .refine((file) => file.type.startsWith("video/"), {
+        error: "動画ファイルではありません"
+    }),
   thumbnail: z
-    .instanceof(File, { message: "ファイルを選択してください" })
-    .refine((file) => file.type.startsWith("image/"), { message: "画像ファイルではありません" }),
+    .instanceof(File, {
+        error: "ファイルを選択してください"
+    })
+    .refine((file) => file.type.startsWith("image/"), {
+        error: "画像ファイルではありません"
+    }),
 });
 
 export type UploadVideoContentInfoSchema = z.infer<typeof uploadVideoContentInfoSchema>;
