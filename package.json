@@ -11,6 +11,12 @@
     "@biomejs/biome": "2.2.4"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "@tailwindcss/oxide", "esbuild", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }
