@@ -7,6 +7,9 @@
     "pnpm": "10.16.1"
   },
   "packageManager": "pnpm@10.16.1",
+  "scripts": {
+    "db": "docker compose -f compose.dev.yaml up -d"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.2.4"
   },
