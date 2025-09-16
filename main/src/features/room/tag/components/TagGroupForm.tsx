@@ -6,6 +6,7 @@ import { useActionState } from "react";
 import { FormHeader } from "@/components/FormHeader";
 import { Form } from "@/components/form/Form";
 import { FormBottom } from "@/components/form/FormBottom";
+import { FormContainer } from "@/components/form/FormContainer";
 import { FormHidden } from "@/components/form/FormHidden";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
@@ -45,7 +46,7 @@ export function TagGroupForm(props: TagGroupFormProps) {
   usePreventResetForm(form);
 
   return (
-    <>
+    <FormContainer>
       <Form {...getFormProps(form)} action={action}>
         <FormHeader title={"タググループ作成"} />
         <FormInputText label="名前" field={fields.name} />
@@ -62,6 +63,6 @@ export function TagGroupForm(props: TagGroupFormProps) {
         </FormBottom>
       </Form>
       <MessageModal open={form.status === "success"} message={props.successMessage} closeText={props.backText} onClose={props.backUrl} />
-    </>
+    </FormContainer>
   );
 }

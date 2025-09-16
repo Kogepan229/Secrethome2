@@ -6,7 +6,7 @@ import { db } from "@/db/db";
 import { contentsTable } from "@/db/schema";
 import { uploadVideoContentInfoSchema } from "./schema";
 
-export async function submitVideoInfo(formData: FormData): Promise<{ submission: SubmissionResult<string[]>; id: string | null }> {
+export async function submitUploadVideoInfo(formData: FormData): Promise<{ submission: SubmissionResult<string[]>; id: string | null }> {
   const submission = parseWithZod(formData, { schema: uploadVideoContentInfoSchema });
   if (submission.status !== "success") {
     return { submission: submission.reply(), id: null };

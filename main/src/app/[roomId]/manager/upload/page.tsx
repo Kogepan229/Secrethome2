@@ -1,23 +1,18 @@
-import { eq } from "drizzle-orm";
 import { ContentsGridHeader } from "@/components/ContentsGridHeader";
-import { db } from "@/db/db";
-import { tagGroupsTable } from "@/db/schema";
-import { VideoContentForm } from "@/features/room/video/components/VideoContentForm";
+import { FormContainer } from "@/components/form/FormContainer";
+import { getTagGroupsInRoom } from "@/features/room/tag/utils/tag";
+import { VideoUploadForm } from "@/features/room/video/components/VideoUploadForm";
 
 export default async function UploadContentPage({ params }: { params: Promise<{ roomId: string }> }) {
   const { roomId } = await params;
-  const tagGroups = db.select().from(tagGroupsTable).where(eq(tagGroupsTable.roomId, roomId)).orderBy(tagGroupsTable.order);
+  const tagGroups = getTagGroupsInRoom(roomId);
 
   return (
     <main>
-      <VideoContentForm
-        roomId={(await params).roomId}
-        backText="戻る"
-        backUrl={`/${roomId}/manager`}
-        submitText={"アップロード"}
-        successMessage={"アップロードしました"}
-        tagGroups={tagGroups}
-      />
+      <FormContainer>
+        <ContentsGridHeader title="動画アップロード" />
+        <VideoUploadForm roomId={(await params).roomId} tagGroups={tagGroups} />
+      </FormContainer>
     </main>
   );
 }

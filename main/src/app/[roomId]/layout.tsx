@@ -10,16 +10,18 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ roomId: string }>;
 }>) {
-  const data = await db
+  const result = await db
     .select()
     .from(roomsTable)
     .where(eq(roomsTable.id, (await params).roomId));
-  if (data.length !== 1) {
+  const room = result.at(0);
+
+  if (!room) {
     return <div>ルームが見つかりません</div>;
   }
   return (
     <>
-      <RoomHeader roomName={data[0].name} link={`/${data[0].id}/contents`} />
+      <RoomHeader roomName={room.name} link={`/${room.id}/contents`} />
       {children}
     </>
   );

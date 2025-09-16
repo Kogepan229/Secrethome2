@@ -50,7 +50,7 @@ export async function uploadVideo(file: File, contentId: string): Promise<boolea
 
     task
       .then(() => {
-        const index = pool.findIndex((t) => t === task);
+        const index = pool.indexOf(task);
         pool.splice(index);
       })
       .catch((err) => {

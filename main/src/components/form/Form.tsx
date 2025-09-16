@@ -2,5 +2,5 @@
 import type { DetailedHTMLProps, FormHTMLAttributes } from "react";
 
 export function Form(props: DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) {
-  return <form {...props} className=" max-w-125 m-auto mb-10 px-5" />;
+  return <form {...props} className=" max-w-125 m-auto mb-10" />;
 }

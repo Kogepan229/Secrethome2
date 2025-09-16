@@ -6,6 +6,15 @@ import type { SearchParams } from "@/utils/searchParams";
 
 export const CONTENTS_NUM_PER_PAGE = 20;
 
+export async function getContent(contentId: string) {
+  return (
+    await db
+      .select()
+      .from(contentsTable)
+      .where(and(eq(contentsTable.id, contentId), eq(contentsTable.status, "available")))
+  ).at(0);
+}
+
 export async function getAvailableContentsCount(roomId: string, tagIds: string[] | undefined): Promise<number> {
   if (tagIds) {
     const result = await db

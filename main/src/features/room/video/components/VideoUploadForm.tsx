@@ -16,18 +16,13 @@ import { FormTag } from "../../common/components/FormTag";
 import type { TagGroupSchema, TagSchema } from "../../common/schema";
 import { objectToFormData } from "../../common/utils/formdata";
 import { uploadThumbnail } from "../../common/utils/uploadThumbnail";
-import { deleteVideoInfo, submitVideoInfo } from "../actions";
-import { type UploadVideoContentSchema, uploadVideoContentInfoSchema, uploadVideoContentSchema } from "../schema";
+import { deleteVideoInfo, submitUploadVideoInfo } from "../actions";
+import { uploadVideoContentInfoSchema, uploadVideoContentSchema } from "../schema";
 import { uploadVideo } from "../utils/uploadVideo";
 import { FormInputVideo } from "./FormInputVideo";
 
-export type VideoContentFormProps = {
+export type VideoUploadFormProps = {
   roomId: string;
-  inititlValue?: UploadVideoContentSchema;
-  backText: string;
-  backUrl: string;
-  submitText: string;
-  successMessage: string;
   tagGroups: Promise<TagGroupSchema[]>;
 };
 
@@ -45,23 +40,22 @@ async function uploadMediaContents(id: string, thumbnail: File, video: File): Pr
   return true;
 }
 
-export function VideoContentForm(props: VideoContentFormProps) {
+export function VideoUploadForm(props: VideoUploadFormProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [selectedTagList, setSelectedTagList] = useState<TagSchema[]>([]);
 
-  const { focusProgressBar, progressBar, onProgress } = useProgressBar(isUploading);
-  const isUpdate = props.inititlValue !== undefined;
+  const { focusProgressBar, progressBar } = useProgressBar(isUploading);
 
   const [lastResult, setLastResult] = useState<SubmissionResult<string[]> | null>(null);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: isUpdate ? uploadVideoContentSchema : uploadVideoContentSchema });
+      return parseWithZod(formData, { schema: uploadVideoContentSchema });
     },
     defaultValue: { roomId: props.roomId },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
-    onSubmit: async (e, c) => {
+    onSubmit: async (e) => {
       e.preventDefault();
 
       const info = await uploadVideoContentInfoSchema.safeParseAsync(form.value);
@@ -72,7 +66,7 @@ export function VideoContentForm(props: VideoContentFormProps) {
       setIsUploading(true);
       focusProgressBar();
 
-      const resultInfo = await submitVideoInfo(objectToFormData(info.data));
+      const resultInfo = await submitUploadVideoInfo(objectToFormData(info.data));
       if (resultInfo.id === null) {
         setLastResult(resultInfo.submission);
         setIsUploading(false);
@@ -116,20 +110,15 @@ export function VideoContentForm(props: VideoContentFormProps) {
         <FormBottom formErrors={form.errors}>
           {progressBar}
           <FormSubmitCalcel
-            cancelText={props.backText}
-            hrefCancel={props.backUrl}
-            submitText={props.submitText}
+            cancelText="戻る"
+            hrefCancel={`/${props.roomId}/manager`}
+            submitText="アップロード"
             dirty={form.dirty}
             disabled={!uploadVideoContentSchema.safeParse(form.value).success || isUploading}
           />
         </FormBottom>
       </Form>
-      <MessageModal
-        open={form.status === "success"}
-        message={isUpdate ? "更新しました" : "追加しました"}
-        closeText={"戻る"}
-        onClose={`/${props.roomId}/manager`}
-      />
+      <MessageModal open={form.status === "success"} message="追加しました" closeText="戻る" onClose={`/${props.roomId}/manager`} />
     </>
   );
 }

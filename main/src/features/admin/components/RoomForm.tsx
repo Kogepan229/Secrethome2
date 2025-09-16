@@ -4,6 +4,7 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState } from "react";
 import { Form } from "@/components/form/Form";
 import { FormBottom } from "@/components/form/FormBottom";
+import { FormContainer } from "@/components/form/FormContainer";
 import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
@@ -40,7 +41,7 @@ export function RoomForm(props: RoomFormProps) {
   usePreventResetForm(form);
 
   return (
-    <>
+    <FormContainer>
       <Form {...getFormProps(form)} action={action}>
         <FormInputText label="ID" field={fields.id} />
         <FormInputText label="名前" field={fields.name} />
@@ -67,6 +68,6 @@ export function RoomForm(props: RoomFormProps) {
         </FormBottom>
       </Form>
       <MessageModal open={form.status === "success"} message={props.successMessage} closeText={props.backText} onClose={props.backUrl} />
-    </>
+    </FormContainer>
   );
 }
