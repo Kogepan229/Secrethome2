@@ -50,6 +50,8 @@ jobs:
 
       - name: Cache rust
         uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: backend
 
       - name: Check backend
         working-directory: backend
