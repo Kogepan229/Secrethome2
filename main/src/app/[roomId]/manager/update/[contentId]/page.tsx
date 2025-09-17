@@ -5,7 +5,7 @@ import { getContentTags, getTagGroupsInRoom } from "@/features/room/tag/utils/ta
 import { VideoUpdateForm } from "@/features/room/video/components/VideoUpdateForm";
 import { getVideoId } from "@/features/room/video/utils/videoContent";
 
-export async function UpdatePage({ params }: PageProps<"/[roomId]/manager/update/[contentId]">) {
+export default async function UpdatePage({ params }: PageProps<"/[roomId]/manager/update/[contentId]">) {
   const { roomId, contentId } = await params;
   const tagGroups = getTagGroupsInRoom(roomId);
   const content = await getContent(contentId);
@@ -37,5 +37,3 @@ export async function UpdatePage({ params }: PageProps<"/[roomId]/manager/update
     </main>
   );
 }
-
-export default UpdatePage;

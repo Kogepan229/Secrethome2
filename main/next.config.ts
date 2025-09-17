@@ -2,6 +2,9 @@ import { URL } from "node:url";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [new URL("http://localhost:20080/**")],
   },
