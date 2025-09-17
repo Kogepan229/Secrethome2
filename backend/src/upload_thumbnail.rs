@@ -33,13 +33,14 @@ async fn upload_thumbnail_handler(
     }
 
     let thumbnail_dir_path = CONFIG.data_dir.join("contents").join("thumbnail");
-    create_dir_all(thumbnail_dir_path.clone()).await?;
+    create_dir_all(&thumbnail_dir_path).await?;
 
     let thumbnail_id = cuid2::create_id();
 
     let _thumbnail_id = thumbnail_id.clone();
+    let _thumbnail_dir_path = thumbnail_dir_path.clone();
     tokio::task::spawn_blocking::<_, Result<()>>(move || {
-        let mut thumbnail_path = thumbnail_dir_path.join(_thumbnail_id);
+        let mut thumbnail_path = _thumbnail_dir_path.join(_thumbnail_id);
         thumbnail_path.set_extension("webp");
 
         ImageReader::new(BufReader::new(form.thumbnail.file.as_file()))
@@ -53,6 +54,21 @@ async fn upload_thumbnail_handler(
         Ok(())
     })
     .await??;
+
+    let existing_thumbnail_id_result = sqlx::query_scalar!(
+        "SELECT thumbnail_id FROM contents WHERE id = $1",
+        form.id.as_str()
+    )
+    .fetch_optional(pool.as_ref())
+    .await?
+    .flatten();
+
+    // Delete old thumbnail if exists
+    if let Some(existing_thumbnail_id) = existing_thumbnail_id_result {
+        let mut existing_thumbnail_path = thumbnail_dir_path.join(existing_thumbnail_id);
+        existing_thumbnail_path.set_extension("webp");
+        tokio::fs::remove_file(existing_thumbnail_path).await?;
+    }
 
     sqlx::query!(
         "UPDATE contents SET thumbnail_id = $1 WHERE id = $2",

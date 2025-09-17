@@ -1,8 +1,10 @@
 use actix_multipart::form::{MultipartForm, tempfile::TempFile, text::Text};
 use actix_web::{HttpResponse, Responder, post, web};
 use anyhow::{Context, Result, bail};
+use cuid2::cuid;
 // use ez_ffmpeg::{FfmpegContext, Output};
 use log::{error, info};
+use serde::Serialize;
 use sqlx::{Pool, Postgres};
 use std::{collections::HashMap, path::Path, sync::LazyLock};
 use tokio::{
@@ -16,7 +18,9 @@ use tokio::{
 
 use crate::{config::CONFIG, error::AppError, filehash::hash_file};
 
+#[derive(Debug, Clone)]
 struct UploadInfo {
+    content_id: String,
     total_chunk: u16,
     uploaded_chunk: u16,
     hash: String,
@@ -32,21 +36,31 @@ struct UploadStart {
     hash: Text<String>,
 }
 
+#[derive(Serialize)]
+struct UploadStartResponse {
+    video_id: String,
+}
+
 #[post("/file-api/video/upload/start")]
 async fn upload_video_start_handler(
     MultipartForm(form): MultipartForm<UploadStart>,
 ) -> Result<impl Responder, AppError> {
+    let video_id = cuid().to_string();
+
     let mut lock = MAP.lock().await;
     lock.insert(
-        form.id.to_string(),
+        video_id.clone(),
         UploadInfo {
+            content_id: form.id.to_string(),
             total_chunk: *form.total_chunk,
             uploaded_chunk: 0,
             hash: form.hash.to_string(),
         },
     );
 
-    Ok(HttpResponse::Ok())
+    let res = UploadStartResponse { video_id };
+
+    Ok(web::Json(res))
 }
 
 #[derive(Debug, MultipartForm)]
@@ -109,6 +123,11 @@ pub fn start_video_processing_worker(pool: Pool<Postgres>) -> VideoProcessSender
             }
 
             {
+                let mut lock = MAP.lock().await;
+                lock.remove(&id);
+            }
+
+            {
                 let chunks_path = CONFIG
                     .data_dir
                     .join("tmp")
@@ -135,10 +154,20 @@ enum ContentStatusType {
 }
 
 async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
-    let (total_chunk, original_hash) = {
+    // let (total_chunk, original_hash) = {
+    //     let lock = MAP.lock().await;
+    //     match lock.get(id) {
+    //         Some(info) => (info.total_chunk, info.hash.clone()),
+    //         None => {
+    //             bail!("Could not found id in map");
+    //         }
+    //     }
+    // };
+
+    let info = {
         let lock = MAP.lock().await;
         match lock.get(id) {
-            Some(info) => (info.total_chunk, info.hash.clone()),
+            Some(info) => info.clone(),
             None => {
                 bail!("Could not found id in map");
             }
@@ -161,7 +190,7 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
             .await?;
 
         let chunks_dir_path = tmp_video_dir_path.join("chunks").join(id);
-        for index in 0..total_chunk {
+        for index in 0..info.total_chunk {
             let mut chunk_file = File::open(chunks_dir_path.join(index.to_string())).await?;
 
             tokio::io::copy(&mut chunk_file, &mut video_file).await?;
@@ -170,14 +199,15 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
     }
 
     let hash = hash_file(tmp_video_path.clone()).await?;
-    if original_hash != hash {
+    if info.hash != hash {
         error!("File hash is not match id: {}", id);
         remove_file(&tmp_video_path).await?;
         return Ok(());
     }
     println!("hash {}", hash);
 
-    let video_dir_path = CONFIG.data_dir.join("contents").join("video").join(id);
+    let video_dir_base_path = CONFIG.data_dir.join("contents").join("video");
+    let video_dir_path = video_dir_base_path.join(id);
     let mut video_path = video_dir_path.join("original");
     video_path.set_extension("mp4");
 
@@ -229,6 +259,8 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
         )
     }
 
+    let mut tx = pool.begin().await?;
+
     sqlx::query!(
         "UPDATE contents SET status = $1 WHERE id = $2",
         if exit_status.success() {
@@ -236,10 +268,54 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
         } else {
             ContentStatusType::Error
         } as _,
-        id
+        info.content_id
     )
-    .execute(pool)
+    .execute(&mut *tx)
     .await?;
+
+    let existing_video_id_result = sqlx::query_scalar!(
+        "SELECT video_id FROM content_video_table WHERE content_id = $1",
+        info.content_id
+    )
+    .fetch_optional(&mut *tx)
+    .await?
+    .flatten();
+
+    match existing_video_id_result {
+        Some(existing_video_id) => {
+            sqlx::query!(
+                "UPDATE content_video_table SET video_id = $1 WHERE content_id = $2",
+                &id,
+                &info.content_id
+            )
+            .execute(&mut *tx)
+            .await?;
+
+            // Delete old video
+            // Move to deleted_videos dir
+            let existing_video_dir_path = video_dir_base_path.join(&existing_video_id);
+            let deleted_video_dir_base_path =
+                CONFIG.data_dir.join("contents").join("deleted_videos");
+
+            create_dir_all(&deleted_video_dir_base_path).await?;
+            tokio::fs::rename(
+                existing_video_dir_path,
+                deleted_video_dir_base_path.join(&existing_video_id),
+            )
+            .await?;
+        }
+        None => {
+            sqlx::query!(
+                "INSERT INTO content_video_table (content_id, video_id) VALUES ($1, $2)",
+                info.content_id,
+                &id
+            )
+            .execute(&mut *tx)
+            .await?;
+        }
+    }
+
+    tx.commit().await?;
 
     Ok(())
 }
