@@ -24,9 +24,9 @@ export async function SideBar({ roomId }: { roomId: string }) {
   const tagList = tagGroups.map((group) => <SideBarTagList roomId={roomId} tagGroup={group} tags={tags} key={group.id} />);
 
   return (
-    <div className="w-50">
+    <div className="w-50 h-full">
       <div className="w-full h-10 bg-primary text-white-primary text-center leading-10">タグ一覧</div>
-      {tagList}
+      <div className="border-r border-b border-border-gray">{tagList}</div>
     </div>
   );
 }
