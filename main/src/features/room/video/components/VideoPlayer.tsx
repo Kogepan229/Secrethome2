@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useCombinedRefs } from "@/hooks/useCombinedRefs";
 
 function ControlButton({
   children,
@@ -80,9 +81,7 @@ type Props = {
 export function VideoPlayer(props: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  if (props.videoRef) {
-    props.videoRef.current = videoRef.current;
-  }
+  const combinedVideoRef = useCombinedRefs(videoRef, props.videoRef);
 
   useEffect(() => {
     if (!props.src || !videoRef.current) return;
@@ -123,6 +122,8 @@ export function VideoPlayer(props: Props) {
   function onEmptied() {
     setIsPlaying(false);
     setCanPlay(false);
+    setVideoMaxTime(0);
+    setVideoCurrentTime(0);
   }
 
   function onChangeSeekbar(e: ChangeEvent<HTMLInputElement>) {
@@ -267,7 +268,7 @@ export function VideoPlayer(props: Props) {
   return (
     <div ref={containerRef} className="w-full relative z-10">
       <video
-        ref={videoRef}
+        ref={combinedVideoRef}
         className="w-full h-full bg-zinc-900 aspect-video [&[src]]:aspect-auto"
         onLoadedMetadata={onLoadedMetadata}
         onTimeUpdate={onTimeUpdate}
