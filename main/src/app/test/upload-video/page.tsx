@@ -62,8 +62,8 @@ export default function TestUploadVideoPage() {
       const task = ky.post<void>("http://localhost:20080/api/video/upload/chunk", { body: chunkData });
 
       task
-        .then((res) => {
-          const index = pool.findIndex((t) => t === task);
+        .then((_res) => {
+          const index = pool.indexOf(task);
           pool.splice(index);
         })
         .catch((err) => {
