@@ -13,6 +13,8 @@ import {
 } from "react";
 import { useCombinedRefs } from "@/hooks/useCombinedRefs";
 
+const SEEKBAR_RATIO = 10;
+
 function ControlButton({
   children,
   onClick,
@@ -107,8 +109,8 @@ export function VideoPlayer(props: Props) {
   const moveTimer = useRef<number>(null);
 
   function onLoadedMetadata() {
-    if (!Number.isNaN(videoRef.current?.duration) && videoRef.current?.duration) {
-      setVideoMaxTime(Math.round(videoRef.current?.duration));
+    if (!Number.isNaN(videoRef.current?.duration) && videoRef.current?.duration !== undefined) {
+      setVideoMaxTime(videoRef.current?.duration);
     }
     onTimeUpdate();
   }
@@ -127,7 +129,7 @@ export function VideoPlayer(props: Props) {
   }
 
   function onChangeSeekbar(e: ChangeEvent<HTMLInputElement>) {
-    const time = Number(e.target.value);
+    const time = Number(e.target.value) / SEEKBAR_RATIO;
     videoRef.current!.currentTime = time;
     setVideoCurrentTime(time);
   }
@@ -269,12 +271,15 @@ export function VideoPlayer(props: Props) {
     <div ref={containerRef} className="w-full relative z-10">
       <video
         ref={combinedVideoRef}
-        className="w-full h-full bg-zinc-900 aspect-video [&[src]]:aspect-auto"
+        playsInline
+        preload="auto"
+        className="w-full h-full bg-zinc-900 aspect-video"
         onLoadedMetadata={onLoadedMetadata}
         onTimeUpdate={onTimeUpdate}
         onEnded={() => setIsPlaying(false)}
         onCanPlay={() => setCanPlay(true)}
         onEmptied={onEmptied}
+        onPlaying={() => setCanPlay(true)}
       />
       <div
         onMouseMove={onVideoMouseMove}
@@ -290,7 +295,7 @@ export function VideoPlayer(props: Props) {
           <div className="w-[calc(100%-24px)] h-4 mx-3 absolute bottom-12 hover:[&>div]:block hover:[&>div]:h-[5px] hover:[&>div]:bottom-[-1px] hover:cursor-pointer">
             <input
               type="range"
-              max={videoMaxTime}
+              max={Math.round(videoMaxTime * SEEKBAR_RATIO)}
               onChange={onChangeSeekbar}
               onMouseDown={onMouseDownSeekbar}
               onMouseUp={onMouseUpSeekbar}
