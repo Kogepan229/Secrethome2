@@ -1,33 +1,63 @@
 "use client";
 import { type FieldMetadata, getInputProps } from "@conform-to/react";
-import { type ChangeEvent, useRef, useState } from "react";
-
+import Hls from "hls.js";
+import { type ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { BasicButton } from "@/components/BasicButton";
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
 import { formStyles } from "@/components/form/formStyles";
 import { VideoPlayer } from "./VideoPlayer";
 
-export function FormInputVideo({ videoField, thumbnailField }: { videoField: FieldMetadata; thumbnailField: FieldMetadata }) {
+type FormInputVideoProps = {
+  videoField: FieldMetadata;
+  thumbnailField: FieldMetadata;
+  initialVideoUrl?: string;
+  initialThumbnailUrl?: string;
+};
+
+export function FormInputVideo({ videoField, thumbnailField, initialVideoUrl, initialThumbnailUrl }: FormInputVideoProps) {
   const [thumbnailSrc, setThumbnailSrc] = useState<string | undefined>(undefined);
   const videoRef = useRef<HTMLVideoElement>(null);
   const inputThumbnailRef = useRef<HTMLInputElement>(null);
+
+  const loadInitialVideo = useCallback(() => {
+    if (!videoRef.current || !initialVideoUrl) return;
+
+    if (Hls.isSupported()) {
+      videoRef.current.removeAttribute("src");
+      const hls = new Hls();
+      hls.loadSource(initialVideoUrl);
+      hls.attachMedia(videoRef.current);
+    } else {
+      videoRef.current.setAttribute("src", initialVideoUrl);
+    }
+    videoRef.current.load();
+  }, [initialVideoUrl]);
 
   function handleOnChangeVideo(e: ChangeEvent<HTMLInputElement>) {
     if (!videoRef.current) return;
 
     if (e.target.files !== undefined && e.target.files?.length === 1) {
       videoRef.current.setAttribute("src", URL.createObjectURL(e.target.files[0]));
-      videoRef.current.load();
+    } else if (initialVideoUrl) {
+      loadInitialVideo();
+      return;
+    } else {
+      videoRef.current.removeAttribute("src");
     }
+    videoRef.current.load();
   }
 
   function handleOnChangeThumbnail(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length !== 0) {
       setThumbnailSrc(URL.createObjectURL(e.target.files[0]));
+    } else if (initialThumbnailUrl) {
+      setThumbnailSrc(initialThumbnailUrl);
+    } else {
+      setThumbnailSrc(undefined);
     }
   }
 
-  function loadThumbnailFromVideo(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function loadThumbnailFromVideo(_e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (!videoRef.current) return;
 
     const canvas = document.createElement("canvas");
@@ -49,6 +79,18 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
       1,
     );
   }
+
+  useEffect(() => {
+    if (initialVideoUrl) {
+      loadInitialVideo();
+    }
+  }, [initialVideoUrl, loadInitialVideo]);
+
+  useEffect(() => {
+    if (initialThumbnailUrl) {
+      setThumbnailSrc(initialThumbnailUrl);
+    }
+  }, [initialThumbnailUrl]);
 
   return (
     <>
@@ -78,10 +120,7 @@ export function FormInputVideo({ videoField, thumbnailField }: { videoField: Fie
           動画からセーブ
         </BasicButton>
         <ErrorMessage message={thumbnailField.errors} />
-        {thumbnailField.value ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumbnailSrc} alt="thumbnail" className="w-full mt-1" />
-        ) : null}
+        {thumbnailSrc ? <img src={thumbnailSrc} alt="thumbnail" className="w-full mt-1" /> : null}
       </div>
     </>
   );

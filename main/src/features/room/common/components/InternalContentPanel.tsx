@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense, use } from "react";
+import { getThumbnailUrl } from "@/utils/urls";
 import type { ContentSchema, TagSchema } from "../schema";
 
 function Info({
@@ -62,7 +63,7 @@ export function InternalContentPanel({
         <div className="w-full h-50">
           <Link href={contentLink} className="block relative w-full h-full">
             <Image
-              src={`${process.env.NEXT_PUBLIC_FILES_URL}/thumbnail/${content.thumbnailId}.webp`}
+              src={getThumbnailUrl(content.thumbnailId ?? "")}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover"

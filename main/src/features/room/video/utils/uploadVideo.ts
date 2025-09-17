@@ -27,10 +27,16 @@ export async function uploadVideo(file: File, contentId: string): Promise<boolea
   startData.append("total_chunk", String(Math.ceil(file.size / CHUNK_SIZE)));
   startData.append("hash", await calcHash(file));
 
-  const res = await fileApi.post<void>("video/upload/start", { body: startData });
+  const res = await fileApi.post<{ video_id: string }>("video/upload/start", { body: startData });
   if (!res.ok) {
     return false;
   }
+  const data = await res.json();
+  if (!data.video_id) {
+    console.error("Not found video_id ");
+    return false;
+  }
+
   const pool: ResponsePromise<void>[] = [];
   let errorOccurred = false;
   let start = 0;
@@ -40,7 +46,7 @@ export async function uploadVideo(file: File, contentId: string): Promise<boolea
     const end = Math.min(start + CHUNK_SIZE, file.size);
     const chunk = file.slice(start, end);
     const chunkData = new FormData();
-    chunkData.append("id", contentId);
+    chunkData.append("id", data.video_id);
     chunkData.append("index", String(chunkIndex));
     chunkData.append("chunk", chunk);
     start += CHUNK_SIZE;
