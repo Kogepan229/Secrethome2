@@ -17,6 +17,9 @@
         "useKeyWithClickEvents": "off",
         "noStaticElementInteractions": "off",
         "useMediaCaption": "off"
+      },
+      "performance": {
+        "noImgElement": "off"
       }
     }
   }
