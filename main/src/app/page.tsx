@@ -9,7 +9,6 @@ import { Form } from "@/components/form/Form";
 import { FormInputText } from "@/components/form/FormInputText";
 import { accessRoomAction } from "@/features/room/common/actions";
 import { accessRoomSchema } from "@/features/room/common/schema";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 
 export default function Home() {
   const [lastResult, action] = useActionState(accessRoomAction, undefined);
@@ -21,7 +20,6 @@ export default function Home() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
-  usePreventResetForm(form);
 
   return (
     <div>

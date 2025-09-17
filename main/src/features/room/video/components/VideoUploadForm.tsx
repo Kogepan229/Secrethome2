@@ -10,7 +10,6 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { useProgressBar } from "@/components/form/ProgressBar";
 import { MessageModal } from "@/components/MessageModal";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { submitContentTags } from "../../common/actions";
 import { FormTag } from "../../common/components/FormTag";
 import type { TagGroupSchema, TagSchema } from "../../common/schema";
@@ -97,8 +96,7 @@ export function VideoUploadForm(props: VideoUploadFormProps) {
       return;
     },
   });
-  usePreventResetForm(form);
-  console.debug(uploadVideoContentSchema.safeParse(form.value));
+
   return (
     <>
       <Form {...getFormProps(form)}>

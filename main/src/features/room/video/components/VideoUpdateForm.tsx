@@ -10,7 +10,6 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { useProgressBar } from "@/components/form/ProgressBar";
 import { MessageModal } from "@/components/MessageModal";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { getContentPageUrl, getThumbnailUrl } from "@/utils/urls";
 import { submitContentTags } from "../../common/actions";
 import { FormTag } from "../../common/components/FormTag";
@@ -115,7 +114,6 @@ export function VideoUpdateForm(props: VideoUpdateFormProps) {
       return;
     },
   });
-  usePreventResetForm(form);
 
   return (
     <>

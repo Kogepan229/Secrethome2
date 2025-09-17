@@ -12,7 +12,6 @@ import { FormInputText } from "@/components/form/FormInputText";
 import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { MessageModal } from "@/components/MessageModal";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { createTagGroupAction, updateTagGroupAction } from "../actions";
 import { createTagGroupSchema, type UpdateTagGroupSchema, updateTagGroupSchema } from "../schema";
 
@@ -43,7 +42,6 @@ export function TagGroupForm(props: TagGroupFormProps) {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
-  usePreventResetForm(form);
 
   return (
     <FormContainer>

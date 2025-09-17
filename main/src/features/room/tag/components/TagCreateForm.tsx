@@ -8,7 +8,6 @@ import { useActionState, useEffect, useState } from "react";
 import { BasicButton } from "@/components/BasicButton";
 import { ErrorMessage } from "@/components/form/FormErrorMessage";
 import { FormHidden } from "@/components/form/FormHidden";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { createTagAction } from "../actions";
 import { createTagSchema } from "../schema";
 
@@ -29,7 +28,7 @@ export function TagCreateForm({ tagGroupId }: { tagGroupId: string }) {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
-  usePreventResetForm(form);
+
   useEffect(() => {
     if (lastResult?.status === "success") {
       setFormId(createId());

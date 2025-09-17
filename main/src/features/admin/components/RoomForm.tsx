@@ -10,7 +10,6 @@ import { FormInputTextArea } from "@/components/form/FormInputTextArea";
 import { FormSelect } from "@/components/form/FormSelect";
 import { FormSubmitCalcel } from "@/components/form/FormSubmitCancel";
 import { MessageModal } from "@/components/MessageModal";
-import { usePreventResetForm } from "@/hooks/usePreventResetForm";
 import { createRoomAction, updateRoomAction } from "../actions";
 import { createRoomSchema, type UpdateRoomSchema, updateRoomSchema } from "../schema";
 import { FormCustomDescriptions } from "./FormCustomDescriptions";
@@ -38,7 +37,6 @@ export function RoomForm(props: RoomFormProps) {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
-  usePreventResetForm(form);
 
   return (
     <FormContainer>
