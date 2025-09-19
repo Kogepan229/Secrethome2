@@ -1,6 +1,7 @@
 import ky from "ky";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import useSWR from "swr";
+import CrossIcon from "@/assets/button/cross.svg";
 import type { TagGroupSchema, TagSchema } from "../schema";
 
 function filterAvailableTags(all: TagSchema[] | undefined, selected: TagSchema[]): TagSchema[] {
@@ -80,9 +81,11 @@ export function TagModal({
   }
   return (
     <div className="flex flex-col fixed w-75 h-100 bg-white border-2 border-border-primary shadow-md z-100">
-      <div className="flex w-full h-9 border-b-2 border-b-border-primary">
-        <div className="grow pl-2 bg-border-primary text-white-primary leading-9 font-bold">タグ一覧</div>
-        <div className="w-9 h-9 border-l-2 border-l-border-primary" onClick={closeCallback} />
+      <div className="flex w-full h-9 border-b-2 bg-border-primary border-b-border-primary">
+        <div className="grow pl-2 text-white-primary leading-9 font-bold">タグ一覧</div>
+        <div className="flex items-center justify-center w-9 h-9 cursor-pointer" onClick={closeCallback}>
+          <CrossIcon width={12} height={12} style={{ fill: "white" }} />
+        </div>
       </div>
       <div className="flex px-2 py-1 border-b border-b-border-primary gap-2">
         <div className="">グループ</div>
@@ -94,7 +97,6 @@ export function TagModal({
           {groupOptions}
         </select>
       </div>
-      <div>{selectedGroup}</div>
       <TagList groupId={selectedGroup} selectedTagList={selectedTagList} selectCallback={selectCallback} />
     </div>
   );
