@@ -12,4 +12,7 @@ export const createTagSchema = createInsertSchema(tagsTable, {
   name: (schema) => schema.trim().min(1, "1文字以上必要です"),
 }).pick({ groupId: true, name: true });
 
+export const editTagSchema = createInsertSchema(tagsTable).omit({ createdAt: true, groupId: true }).required({ id: true });
+
 export type UpdateTagGroupSchema = z.infer<typeof updateTagGroupSchema>;
+export type EditTagSchema = z.infer<typeof editTagSchema>;
