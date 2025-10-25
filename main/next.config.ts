@@ -6,7 +6,7 @@ module.exports = (phase: string) => {
   const nextConfig: NextConfig = {
     images: {
       remotePatterns: [new URL("http://localhost:20080/**")],
-      dangerouslyAllowLocalIP: phase === PHASE_DEVELOPMENT_SERVER ? true : false,
+      dangerouslyAllowLocalIP: phase === PHASE_DEVELOPMENT_SERVER,
     },
     turbopack: {
       rules: {
