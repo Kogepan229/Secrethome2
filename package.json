@@ -4,14 +4,14 @@
   "private": true,
   "engines": {
     "npm": "please use pnpm instead",
-    "pnpm": "10.16.1"
+    "pnpm": "10.19.0"
   },
-  "packageManager": "pnpm@10.16.1",
+  "packageManager": "pnpm@10.19.0",
   "scripts": {
     "db": "docker compose -f compose.dev.yaml up -d"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4"
+    "@biomejs/biome": "2.3.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
