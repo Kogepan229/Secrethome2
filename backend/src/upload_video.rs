@@ -278,8 +278,7 @@ async fn process_video(id: &String, pool: &Pool<Postgres>) -> Result<()> {
         info.content_id
     )
     .fetch_optional(&mut *tx)
-    .await?
-    .flatten();
+    .await?;
 
     match existing_video_id_result {
         Some(existing_video_id) => {
